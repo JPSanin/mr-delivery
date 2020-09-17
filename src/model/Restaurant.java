@@ -22,7 +22,10 @@ public class Restaurant implements Serializable {
 	
 
 
-	public void addProduct() {}
+	public void addProduct(int code, String name, String description, double price) {
+		Product p= new Product(code, name, description,price,taxID);
+		menuItems.add(p);
+	}
 	
 	@Override
 	public String toString() {
@@ -56,6 +59,10 @@ public class Restaurant implements Serializable {
 	
 	public ArrayList<Product> getMenuItems() {
 		return menuItems;
+	}
+	
+	public void setMenuItems(ArrayList<Product> menuItems) {
+		this.menuItems = menuItems;
 	}
 	
 }

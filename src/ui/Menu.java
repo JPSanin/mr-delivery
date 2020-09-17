@@ -15,30 +15,64 @@ public class Menu {
 	}
 
 	public void restaurantAdder()  {
-	String name="";
-	int taxId;
-	String managerName="";
-	 
-	 try {
-		 System.out.println("Please enter the restaurant's name");
-		 name=br.readLine();
-		 System.out.println("Please enter the restaurant's tax ID");
-		 taxId=Integer.parseInt(br.readLine());
-		 System.out.println("Please enter the restaurant's manager name");
-		 managerName=br.readLine();
-		 adminSystem.addRestaurant(name, taxId, managerName);
-	} catch (IOException | NumberFormatException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		String[] resInfo;
+
+		try {
+			System.out.println("Please enter the restaurant's information in the following format:");
+			System.out.println("Restaurant Name; Restaurant Tax ID; Restaurant Manager Name");
+			resInfo=br.readLine().split(";");
+			String name= resInfo[0].trim();
+			int taxId=Integer.parseInt(resInfo[1].trim());
+			String managerName= resInfo[2].trim();
+			adminSystem.addRestaurant(name, taxId, managerName);
+		} catch (IOException | NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	 
+
+	public void productAdder()  {
+
+		String[] productInfo;
+		int exit=adminSystem.getRestaurants().size()+1;
+		int option=0;
+		do {
+			System.out.println("Please select the restaurant that you want to add products to");
+
+			for (int i = 0; i<adminSystem.getRestaurants().size(); i++) {
+				System.out.println((i+1)+") "+adminSystem.getRestaurants().get(i).getName());
+			}
+			System.out.println(exit+") "+"Exit");
+
+			try {
+				option=Integer.parseInt(br.readLine());
+				if(option!=exit) {
+					System.out.println("Please enter the product's information in the following format:");
+					System.out.println("Product Code; Product Name; Product Description; Product Price");
+					productInfo=br.readLine().split(";");
+					int code= Integer.parseInt(productInfo[0].trim());
+					String name= productInfo[1].trim();
+					String description= productInfo[2].trim();
+					double price=Double.parseDouble(productInfo[3].trim());		
+					adminSystem.getRestaurants().get(option-1).addProduct(code, name, description, price); 
+				}
+
+			} catch (IOException | NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+
+		}while(option!=exit);
+
+
+
 	}
 
 	public void start() {
 		//Loading
 		try {
 			adminSystem.loadRestaurants();
+			//adminSystem.loadProducts();
 		} catch (ClassNotFoundException | IOException e) {
 
 			e.printStackTrace();
@@ -46,10 +80,13 @@ public class Menu {
 
 		restaurantAdder();
 		System.out.println(adminSystem.showRestaurants());
+		productAdder();
+		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(0)));
 
 		//Saving
 		try {
 			adminSystem.saveRestaurants();
+			adminSystem.saveProducts();
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

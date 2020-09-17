@@ -1,7 +1,12 @@
 package model;
 
-public class Product  {
+import java.io.Serializable;
 
+public class Product implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int code;
 	private String name;
 	private String description;
@@ -17,6 +22,13 @@ public class Product  {
 	}
 	
 	
+	
+	@Override
+	public String toString() {
+		String r = "";
+		r+=code+";"+name+ ";"+description +";"+ price+ ";"+resTaxID;
+		return r;
+	}
 
 	public int getCode() {
 		return code;

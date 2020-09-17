@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class AdminSystem {
 	public final static String FILE_RES_SER= "data/infoRestaurant.dat";
+	public final static String FILE_PRO_SER= "data/infoProduct.dat";
 
 	private ArrayList<Restaurant> restaurants;
 	//private ArrayList<Client> clients;
@@ -40,6 +41,16 @@ public class AdminSystem {
 		}
 		return info;
 	}
+	
+	public String showProducts(Restaurant r) {
+		String info="";
+		for(int i=0; i<r.getMenuItems().size(); i++) {
+			info+=r.getMenuItems().get(i)+"\n";	
+		}
+		return info;
+	}
+
+
 
 	//Cuando se acabe el programa
 	public void saveRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -61,9 +72,37 @@ public class AdminSystem {
 		}
 	}
 
+	//Cuando se acabe el programa
+	public void saveProducts() throws FileNotFoundException, IOException, ClassNotFoundException {
+		File f = new File(FILE_PRO_SER);
+		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
+		for (int i = 0; i < restaurants.size(); i++) {
+			oos.writeObject(restaurants.get(i).getMenuItems());
+		}
+		
+		oos.close();
+	}
+
+	//Apenas inicie el programa
+	@SuppressWarnings("unchecked")
+	public void loadProducts() throws FileNotFoundException, IOException, ClassNotFoundException {
+		File f = new File(FILE_PRO_SER);
+		ObjectInputStream ois= new ObjectInputStream (new FileInputStream(f));
+		ArrayList<Product> menuItems2=(ArrayList<Product>)ois.readObject();
+		if(menuItems2!=null) {
+			for (int i = 0; i < restaurants.size(); i++) {
+				restaurants.get(i).setMenuItems(menuItems2);
+			}
+			
+			ois.close();
+		}
+	}
 
 	public void exportOrders() {}
 	public void createOrder() {}
 	public void importData() {}
 
+	public ArrayList<Restaurant> getRestaurants() {
+		return restaurants;
+	}
 }
