@@ -9,15 +9,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class System {
+
+public class AdminSystem {
 	public final static String FILE_RES_SER= "data/infoRestaurant.dat";
 
 	private ArrayList<Restaurant> restaurants;
-	private ArrayList<Client> clients;
+	//private ArrayList<Client> clients;
 
-	public System() {
+	public AdminSystem() {
 		restaurants= new ArrayList<Restaurant>();
-		clients=new ArrayList<Client>();
+		//clients=new ArrayList<Client>();
 	}
 
 	public void updateRestaurant() {}
@@ -28,8 +29,17 @@ public class System {
 	public void addClient() {}
 	public void showClients() {}
 
-	public void addRestaurant() {}
-	public void showRestaurants() {}
+	public void addRestaurant(String name, int taxID, String managerName) {
+		Restaurant r= new Restaurant (name, taxID, managerName);
+		restaurants.add(r);
+	}
+	public String showRestaurants() {
+		String info="";
+		for(int i=0; i<restaurants.size(); i++) {
+			info+=restaurants.get(i)+"\n";	
+		}
+		return info;
+	}
 
 	//Cuando se acabe el programa
 	public void saveRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -40,6 +50,7 @@ public class System {
 	}
 
 	//Apenas inicie el programa
+	@SuppressWarnings("unchecked")
 	public void loadRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_RES_SER);
 		ObjectInputStream ois= new ObjectInputStream (new FileInputStream(f));

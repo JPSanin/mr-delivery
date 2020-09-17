@@ -23,7 +23,13 @@ public class Restaurant implements Serializable {
 
 
 	public void addProduct() {}
-
+	
+	@Override
+	public String toString() {
+		String r = "";
+		r+=name+ ";"+taxID +";"+ managerName;
+		return r;
+	}
 	public String getName() {
 		return name;
 	}

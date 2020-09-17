@@ -27,9 +27,18 @@ public class Order {
 	
 	public void generateCode(ArrayList<Client> clients) {
 		boolean isCodeDifferent= false;
+		boolean out=false;
 		do {
 			code= (int) (Math.random()*10000000+1000);
-			//for(int i=0; i< clients.size();)
+			for(int i=0; i< clients.size() && out==false;i++) {
+				
+				for(int j=0; j< clients.get(i).getOrder().size() && out==false;i++) {
+				if(code==clients.get(i).getOrder().get(j).getCode()) {
+					isCodeDifferent=true;
+					out=true;
+				}
+				}
+			}
 			
 		}while(isCodeDifferent==true);
 		
