@@ -3,14 +3,14 @@ package model;
 import java.util.ArrayList;
 
 public class Client {
-	private int idType;
+	private IdType idType;
 	private int idNumber;
 	private String name;
 	private int phoneNumber;
 	private String address;
 	private ArrayList<Order> order;
 	
-	public Client(int idType, int idNumber, String name, int phoneNumber, String address) {
+	public Client(IdType idType, int idNumber, String name, int phoneNumber, String address) {
 		this.idType = idType;
 		this.idNumber = idNumber;
 		this.name = name;
@@ -23,14 +23,19 @@ public class Client {
 
 	public void addOrder() {}
 
-	public int getIdType() {
+
+
+
+	public IdType getIdType() {
 		return idType;
 	}
 
 
-	public void setIdType(int idType) {
+
+	public void setIdType(IdType idType) {
 		this.idType = idType;
 	}
+
 
 
 	public int getIdNumber() {

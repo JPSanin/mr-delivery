@@ -15,7 +15,7 @@ public class Order {
 	private ArrayList<Product> products;
 	
 	public Order(int clientID, int resTaxId) {
-		code= (int) (Math.random()*100000+1000);
+		
 		date = LocalDateTime.now();
 		formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		dateString = date.format(formatter);
@@ -23,6 +23,16 @@ public class Order {
 		this.resTaxId = resTaxId;
 		status=Status.REQUESTED;
 		products=new ArrayList<Product>();
+	}
+	
+	public void generateCode(ArrayList<Client> clients) {
+		boolean isCodeDifferent= false;
+		do {
+			code= (int) (Math.random()*10000000+1000);
+			//for(int i=0; i< clients.size();)
+			
+		}while(isCodeDifferent==true);
+		
 	}
 	
 	public void addProduct(){}
