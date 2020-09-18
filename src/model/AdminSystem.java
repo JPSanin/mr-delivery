@@ -14,7 +14,7 @@ public class AdminSystem {
 	public final static String FILE_RES_SER= "data/infoRestaurant.dat";
 	public final static String FILE_PRO_SER= "data/infoProduct.dat";
 	public final static String FILE_CLI_SER= "data/infoClient.dat";
-	
+	public final static String FILE_ORD_SER= "data/infoOrder.dat";
 	private ArrayList<Restaurant> restaurants;
 	private ArrayList<Client> clients;
 
@@ -62,7 +62,7 @@ public class AdminSystem {
 
 
 
-	//Cuando se acabe el programa
+
 	public void saveRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_RES_SER);
 		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
@@ -70,7 +70,7 @@ public class AdminSystem {
 		oos.close();
 	}
 
-	//Apenas inicie el programa
+
 	@SuppressWarnings("unchecked")
 	public void loadRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_RES_SER);
@@ -82,7 +82,7 @@ public class AdminSystem {
 		}
 	}
 
-	//Cuando se acabe el programa
+
 	public void saveProducts() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_PRO_SER);
 		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
@@ -93,7 +93,7 @@ public class AdminSystem {
 		oos.close();
 	}
 
-	//Apenas inicie el programa
+	
 	@SuppressWarnings("unchecked")
 	public void loadProducts() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_PRO_SER);
@@ -115,7 +115,7 @@ public class AdminSystem {
 		oos.close();
 	}
 
-	//Apenas inicie el programa
+
 	@SuppressWarnings("unchecked")
 	public void loadClients() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_CLI_SER);
@@ -127,7 +127,32 @@ public class AdminSystem {
 		}
 	}
 
-		
+	
+	
+
+		public void saveOrders() throws FileNotFoundException, IOException, ClassNotFoundException {
+			File f = new File(FILE_ORD_SER);
+			ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
+			for (int i = 0; i < clients.size(); i++) {
+				oos.writeObject(clients.get(i).getOrder());
+			}
+			
+			oos.close();
+		}
+
+
+		@SuppressWarnings("unchecked")
+		public void loadOrders() throws FileNotFoundException, IOException, ClassNotFoundException {
+			File f = new File(FILE_ORD_SER);
+			ObjectInputStream ois= new ObjectInputStream (new FileInputStream(f));
+			ArrayList<Order> order2=(ArrayList<Order>)ois.readObject();
+			if(order2!=null) {
+				for (int i = 0; i < clients.size(); i++) {
+					clients.get(i).setOrder(order2);
+				}
+				ois.close();
+			}
+		}	
 
 	public void exportOrders() {}
 	public void createOrder() {}

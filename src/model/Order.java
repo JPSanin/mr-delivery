@@ -30,7 +30,7 @@ public class Order {
 		boolean out=false;
 		do {
 			code= (int) (Math.random()*10000000+1000);
-			for(int i=0; i< clients.size() && out==false;i++) {
+			for(int i=0; i< clients.size();i++) {
 				
 				for(int j=0; j< clients.get(i).getOrder().size() && out==false;i++) {
 				if(code==clients.get(i).getOrder().get(j).getCode()) {

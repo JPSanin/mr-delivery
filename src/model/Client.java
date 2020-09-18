@@ -91,6 +91,11 @@ public class Client implements Serializable {
 	public ArrayList<Order> getOrder() {
 		return order;
 	}
+
+
+	public void setOrder(ArrayList<Order> order) {
+		this.order = order;
+	}
 	
 	
 }
