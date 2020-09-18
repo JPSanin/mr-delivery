@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import model.AdminSystem;
+import model.IdType;
 
 public class Menu {
 
@@ -13,7 +14,27 @@ public class Menu {
 		adminSystem= new AdminSystem();
 		br= new BufferedReader(new InputStreamReader(System.in));
 	}
+	
+	
+	public void clientAdder() {
+		String[] clientInfo;
 
+		try {
+			System.out.println("Please enter the client's information in the following format:");
+			System.out.println("Client IdType (Passport, ID or License); Client ID Number; Client Name; Client Phone Number; Client Address");
+			clientInfo=br.readLine().split(";");
+			String idTypeEnumValue= clientInfo[0].trim().toUpperCase();
+			IdType idType=IdType.valueOf(idTypeEnumValue);
+			int id=Integer.parseInt(clientInfo[1].trim());
+			String name= clientInfo[2].trim();
+			int phoneNumber=Integer.parseInt(clientInfo[3].trim());
+			String address= clientInfo[4].trim();
+			adminSystem.addClient(idType, id,name,phoneNumber,address);
+		} catch (IOException | NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void restaurantAdder()  {
 		String[] resInfo;
 
@@ -63,32 +84,32 @@ public class Menu {
 			}	
 
 		}while(option!=exit);
-
-
-
 	}
 
 	public void start() {
 		//Loading
 		try {
 			adminSystem.loadRestaurants();
-			//adminSystem.loadProducts();
+			adminSystem.loadProducts();
+			adminSystem.loadClients();
 		} catch (ClassNotFoundException | IOException e) {
 
 			e.printStackTrace();
 		}
-
-		restaurantAdder();
+		clientAdder();
+		System.out.println(adminSystem.showClients());
+		/*restaurantAdder();
 		System.out.println(adminSystem.showRestaurants());
 		productAdder();
-		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(0)));
+		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(0)));*/
 
 		//Saving
 		try {
 			adminSystem.saveRestaurants();
 			adminSystem.saveProducts();
+			adminSystem.saveClients();
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

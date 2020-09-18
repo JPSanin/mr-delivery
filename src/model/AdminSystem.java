@@ -13,13 +13,14 @@ import java.util.ArrayList;
 public class AdminSystem {
 	public final static String FILE_RES_SER= "data/infoRestaurant.dat";
 	public final static String FILE_PRO_SER= "data/infoProduct.dat";
-
+	public final static String FILE_CLI_SER= "data/infoClient.dat";
+	
 	private ArrayList<Restaurant> restaurants;
-	//private ArrayList<Client> clients;
+	private ArrayList<Client> clients;
 
 	public AdminSystem() {
 		restaurants= new ArrayList<Restaurant>();
-		//clients=new ArrayList<Client>();
+		clients=new ArrayList<Client>();
 	}
 
 	public void updateRestaurant() {}
@@ -27,8 +28,17 @@ public class AdminSystem {
 	public void updateClient() {}
 	public void updateOrder() {}
 
-	public void addClient() {}
-	public void showClients() {}
+	public void addClient(IdType idType, int idNumber, String name, int phoneNumber, String address) {
+		Client c= new Client (idType,idNumber,name,phoneNumber,address);
+		clients.add(c);
+	}
+	public String showClients() {
+		String info="";
+		for(int i=0; i<clients.size(); i++) {
+			info+=clients.get(i)+"\n";	
+		}
+		return info;
+	}
 
 	public void addRestaurant(String name, int taxID, String managerName) {
 		Restaurant r= new Restaurant (name, taxID, managerName);
@@ -97,6 +107,27 @@ public class AdminSystem {
 			ois.close();
 		}
 	}
+	
+	public void saveClients() throws FileNotFoundException, IOException, ClassNotFoundException {
+		File f = new File(FILE_CLI_SER);
+		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
+		oos.writeObject(clients);
+		oos.close();
+	}
+
+	//Apenas inicie el programa
+	@SuppressWarnings("unchecked")
+	public void loadClients() throws FileNotFoundException, IOException, ClassNotFoundException {
+		File f = new File(FILE_CLI_SER);
+		ObjectInputStream ois= new ObjectInputStream (new FileInputStream(f));
+		ArrayList<Client> clients2=(ArrayList<Client>)ois.readObject();
+		if(clients2!=null) {
+			clients=clients2;
+			ois.close();
+		}
+	}
+
+		
 
 	public void exportOrders() {}
 	public void createOrder() {}

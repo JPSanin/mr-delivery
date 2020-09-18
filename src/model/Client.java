@@ -1,8 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Client {
+public class Client implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private IdType idType;
 	private int idNumber;
 	private String name;
@@ -20,10 +25,16 @@ public class Client {
 	}
 
 	
+	
 
 	public void addOrder() {}
 
-
+	@Override
+	public String toString() {
+		String r = "";
+		r+=idType+ ";"+idNumber +";"+ name+ ";"+phoneNumber +";"+ address;
+		return r;
+	}
 
 
 	public IdType getIdType() {
