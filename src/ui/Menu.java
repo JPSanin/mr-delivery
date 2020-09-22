@@ -9,12 +9,32 @@ public class Menu {
 
 	private AdminSystem adminSystem;
 	private BufferedReader br;
-
+	
 	public Menu() {
 		adminSystem= new AdminSystem();
 		br= new BufferedReader(new InputStreamReader(System.in));
 	}
 	
+	/* Luego lo armas, primero lista ordenada de restaurantes
+	 * luego lista ordenada de clientes
+	public void orderCreator() {
+		String[] orderInfo;
+		int option=0;
+		try {
+			System.out.println("Order Creation Started...");
+			do {
+			System.out.println("Has the client already been registered");
+			System.out.println("1) yes");
+			System.out.println("2) no");
+			option= Integer.parseInt(br.readLine());
+			}while(option!=1 || option!=2);
+			
+		} catch (IOException | NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}*/
 	
 	public void clientAdder() {
 		String[] clientInfo;
@@ -96,9 +116,21 @@ public class Menu {
 
 			e.printStackTrace();
 		}
+		
+		adminSystem.addRestaurant("Authentic Wings", 1098771, "Paco Perea");
+		adminSystem.addRestaurant("Zebra Flavor", 1098771, "Paco Perea");
+		adminSystem.addRestaurant("Sushi Green", 4641651, "Dongjoon Lee");
+		adminSystem.addRestaurant("Sushi Market", 87494, "Bee Song Yu");
+		adminSystem.addRestaurant("PF Changs", 8854201, "Albert Morikawa");
+		System.out.println("Before");
+		System.out.println(adminSystem.showRestaurants());
+		adminSystem.orderRestaurants();
+		System.out.println("After");
+		System.out.println(adminSystem.showRestaurants());
+		/*
 		clientAdder();
 		System.out.println(adminSystem.showClients());
-		/*restaurantAdder();
+		restaurantAdder();
 		System.out.println(adminSystem.showRestaurants());
 		productAdder();
 		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(0)));*/
