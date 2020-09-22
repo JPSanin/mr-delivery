@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Client implements Serializable {
+public class Client implements Serializable, Comparable<Client> {
 	/**
 	 * 
 	 */
@@ -11,11 +11,11 @@ public class Client implements Serializable {
 	private IdType idType;
 	private int idNumber;
 	private String name;
-	private int phoneNumber;
+	private Long phoneNumber;
 	private String address;
 	private ArrayList<Order> order;
 	
-	public Client(IdType idType, int idNumber, String name, int phoneNumber, String address) {
+	public Client(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
 		this.idType = idType;
 		this.idNumber = idNumber;
 		this.name = name;
@@ -24,7 +24,14 @@ public class Client implements Serializable {
 		order=new ArrayList<Order>();
 	}
 
-	
+	@Override
+	public int compareTo(Client otherClient) {
+		int comp;
+		Long p1= phoneNumber;
+		Long p2= otherClient.getPhoneNumber();
+		comp = p2.compareTo(p1);
+		return comp;
+	}
 	
 
 	public void addOrder() {}
@@ -69,12 +76,12 @@ public class Client implements Serializable {
 	}
 
 
-	public int getPhoneNumber() {
+	public Long getPhoneNumber() {
 		return phoneNumber;
 	}
 
 
-	public void setPhoneNumber(int phoneNumber) {
+	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 

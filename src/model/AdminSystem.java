@@ -32,9 +32,21 @@ public class AdminSystem {
 	}
 	public void updateProduct() {}
 	public void updateClient() {}
+	
+	public String printOrderedClientsByPhone() {
+		String info="";
+		ArrayList<Client> phoneClients= clients;
+		Collections.sort(phoneClients);
+		
+		for(int i=0; i<phoneClients.size(); i++) {
+			info+=phoneClients.get(i)+"\n";	
+		}
+		return info;
+	}
+	
 	public void updateOrder() {}
 
-	public void addClient(IdType idType, int idNumber, String name, int phoneNumber, String address) {
+	public void addClient(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
 		Client c= new Client (idType,idNumber,name,phoneNumber,address);
 		clients.add(c);
 	}
@@ -52,6 +64,8 @@ public class AdminSystem {
 	}
 	
 	public void createOrder() {}
+	
+
 	public String showRestaurants() {
 		String info="";
 		for(int i=0; i<restaurants.size(); i++) {
@@ -168,5 +182,8 @@ public class AdminSystem {
 
 	public ArrayList<Restaurant> getRestaurants() {
 		return restaurants;
+	}
+	public ArrayList<Client> getClients() {
+		return clients;
 	}
 }

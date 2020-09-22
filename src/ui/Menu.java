@@ -41,13 +41,13 @@ public class Menu {
 
 		try {
 			System.out.println("Please enter the client's information in the following format:");
-			System.out.println("Client IdType (Passport, ID or License); Client ID Number; Client Name; Client Phone Number; Client Address");
+			System.out.println("Client IdType (Passport, ID or License); Client ID Number; Client Name; Client Phone Number (10 digit); Client Address");
 			clientInfo=br.readLine().split(";");
 			String idTypeEnumValue= clientInfo[0].trim().toUpperCase();
 			IdType idType=IdType.valueOf(idTypeEnumValue);
 			int id=Integer.parseInt(clientInfo[1].trim());
 			String name= clientInfo[2].trim();
-			int phoneNumber=Integer.parseInt(clientInfo[3].trim());
+			Long phoneNumber=Long.parseLong(clientInfo[3].trim());
 			String address= clientInfo[4].trim();
 			adminSystem.addClient(idType, id,name,phoneNumber,address);
 		} catch (IOException | NumberFormatException e) {
@@ -117,7 +117,7 @@ public class Menu {
 			e.printStackTrace();
 		}
 		
-		adminSystem.addRestaurant("Authentic Wings", 1098771, "Paco Perea");
+		/*adminSystem.addRestaurant("Authentic Wings", 1098771, "Paco Perea");
 		adminSystem.addRestaurant("Zebra Flavor", 1098771, "Paco Perea");
 		adminSystem.addRestaurant("Sushi Green", 4641651, "Dongjoon Lee");
 		adminSystem.addRestaurant("Sushi Market", 87494, "Bee Song Yu");
@@ -126,7 +126,20 @@ public class Menu {
 		System.out.println(adminSystem.showRestaurants());
 		adminSystem.orderRestaurants();
 		System.out.println("After");
-		System.out.println(adminSystem.showRestaurants());
+		System.out.println(adminSystem.showRestaurants());*/
+	
+		
+		adminSystem.addClient(IdType.PASSPORT, 4646511,"Collin Sherman", 2128885471L,"Elms Street 342");
+		adminSystem.addClient(IdType.ID, 9848486,"Dustin Jhonson",7874541232L ,"Carmelo Dr 876");
+		adminSystem.addClient(IdType.LICENSE, 42487212,"Bryson DeChambeau",3187287349L ,"Natty Ave 784");
+		adminSystem.addClient(IdType.LICENSE, 42487212,"Sebastian Muñoz", 4795683241L,"Colo Street 151");
+		System.out.println("Before");
+		System.out.println(adminSystem.showClients());
+		
+		
+		
+		System.out.println("After");
+		System.out.println(adminSystem.printOrderedClientsByPhone());
 		/*
 		clientAdder();
 		System.out.println(adminSystem.showClients());
