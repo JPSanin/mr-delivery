@@ -47,8 +47,27 @@ public class AdminSystem {
 	public void updateOrder() {}
 
 	public void addClient(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
+		//Add in order using descendent name 
+		//Cuadrar condición
+		
 		Client c= new Client (idType,idNumber,name,phoneNumber,address);
-		clients.add(c);
+		
+		if(clients.isEmpty()) {
+			clients.add(c);
+		}else {
+			int i = 0;
+			while(i<clients.size() && (c.getName().compareTo(clients.get(i).getName())<=0)) {
+				i++;
+			}
+			
+			if(i==clients.size()) {
+			clients.add(c);	
+			}else {
+			clients.add(i,c);	
+			}
+			
+		}
+		
 	}
 	public String showClients() {
 		String info="";

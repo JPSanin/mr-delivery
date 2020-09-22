@@ -11,6 +11,7 @@ public class Client implements Serializable, Comparable<Client> {
 	private IdType idType;
 	private int idNumber;
 	private String name;
+	
 	private Long phoneNumber;
 	private String address;
 	private ArrayList<Order> order;
@@ -18,7 +19,8 @@ public class Client implements Serializable, Comparable<Client> {
 	public Client(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
 		this.idType = idType;
 		this.idNumber = idNumber;
-		this.name = name;
+		String[] names= name.split(" ",2);
+		this.name = names[1]+ " "+ names[0];
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		order=new ArrayList<Order>();

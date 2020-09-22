@@ -132,14 +132,14 @@ public class Menu {
 		adminSystem.addClient(IdType.PASSPORT, 4646511,"Collin Sherman", 2128885471L,"Elms Street 342");
 		adminSystem.addClient(IdType.ID, 9848486,"Dustin Jhonson",7874541232L ,"Carmelo Dr 876");
 		adminSystem.addClient(IdType.LICENSE, 42487212,"Bryson DeChambeau",3187287349L ,"Natty Ave 784");
+		adminSystem.addClient(IdType.LICENSE, 42487212,"Carson DeChambeau",3187287349L ,"Natty Ave 784");
 		adminSystem.addClient(IdType.LICENSE, 42487212,"Sebastian Muñoz", 4795683241L,"Colo Street 151");
-		System.out.println("Before");
+		System.out.println("ordered by name");
 		System.out.println(adminSystem.showClients());
 		
 		
 		
-		System.out.println("After");
-		System.out.println(adminSystem.printOrderedClientsByPhone());
+	
 		/*
 		clientAdder();
 		System.out.println(adminSystem.showClients());
