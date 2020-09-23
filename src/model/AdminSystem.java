@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import exceptions.RestaurantNotFoundException;
+
 
 public class AdminSystem {
 	public final static String FILE_RES_SER= "data/infoRestaurant.dat";
@@ -23,8 +25,24 @@ public class AdminSystem {
 		restaurants= new ArrayList<Restaurant>();
 		clients=new ArrayList<Client>();
 	}
-
-	public void updateRestaurant() {}
+	//El programa debe tener la posibilidad de actualizar los datos de un restaurante dado el nit
+	public int updateRestaurant(int taxID) throws RestaurantNotFoundException{
+		int search= taxID;
+		boolean found= false;
+		int index=0;
+		for (int i = 0; i < restaurants.size() && !found; i++) {
+			if(restaurants.get(i).getTaxID()==search) {
+			index=i;
+			found =true;
+			}
+		}
+		
+		if(found) {
+			return index;
+		}else {
+			throw new RestaurantNotFoundException(search);
+		}	
+	}
 	
 	public void orderRestaurants() {
 		RestaurantNameComparator rnc= new RestaurantNameComparator();
