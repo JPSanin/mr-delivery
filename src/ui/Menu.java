@@ -3,9 +3,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import exceptions.ClientNotFoundException;
 import exceptions.ProductNotFoundException;
 import exceptions.RestaurantNotFoundException;
 import model.AdminSystem;
+import model.Client;
 import model.IdType;
 
 
@@ -92,8 +94,7 @@ public class Menu {
 			e.printStackTrace();
 		}
 	}
-
-
+	
 	public void productUpdater() {
 		int code=0;
 		int index1 = 0;
@@ -103,8 +104,6 @@ public class Menu {
 		int option;
 		try {
 
-
-			
 				System.out.println("Please select the restaurant whose product's you want to update");
 				System.out.println(adminSystem.showRestaurantsOptions());
 				
@@ -174,7 +173,96 @@ public class Menu {
 		}
 	}
 
+	public void clientUpdater() {
+		int docNum=0;
+		int index = 0;
+		int option;
+		try {
+			System.out.println("Please enter the client's Document Number");
+			docNum=Integer.parseInt(br.readLine());
+
+			try {
+				index=adminSystem.updateClient(docNum);
+				do {
+					 
+					System.out.println("Please select the client's information you want to update");
+					System.out.println("1) Client Name");
+					System.out.println("2) Client Document Type");
+					System.out.println("3) Client Document Number");
+					System.out.println("4) Client Phone Number");
+					System.out.println("5) Client adress");
+					System.out.println("6) Exit");
+					option= Integer.parseInt(br.readLine());
+
+					switch(option) {
+					case 1: 
+						System.out.println("Please enter client's new name");
+						String cn= br.readLine();
+						adminSystem.getClients().get(index).setName(cn);
+						System.out.println("Client name updated succesfully to: "+cn);
+						break;
+					case 2:
+						int option2;
+						System.out.println("Please select new Document Type");
+						System.out.println("1) Passport");
+						System.out.println("2) ID");
+						System.out.println("3) License");
+						option2= Integer.parseInt(br.readLine());
+						switch(option2) {
+						case 1:
+							adminSystem.getClients().get(index).setIdType(IdType.PASSPORT);
+							System.out.println("Client document type updated succesfully to: Passport");
+							break;
+						case 2:
+							adminSystem.getClients().get(index).setIdType(IdType.ID);
+							System.out.println("Client document type updated succesfully to: ID");
+							break;
+						case 3:
+							adminSystem.getClients().get(index).setIdType(IdType.LICENSE);
+							System.out.println("Client document type updated succesfully to: License");
+							break;
+						}
+						break;
+					case 3:
+						System.out.println("Please enter Client's new document number");
+						int dn= Integer.parseInt(br.readLine());
+						adminSystem.getClients().get(index).setIdNumber(dn);;
+						System.out.println("Client's document number updated succesfully to: "+dn);
+						break;	
+					case 4:
+						System.out.println("Please enter Client's new phone number (10 digit)");
+						Long pn= Long.parseLong(br.readLine());
+						adminSystem.getClients().get(index).setPhoneNumber(pn);;
+						System.out.println("Client's phone number updated succesfully to: "+pn);
+						break;	
+					case 5: 
+						System.out.println("Please enter client's new address");
+						String ad= br.readLine();
+						adminSystem.getClients().get(index).setAddress(ad);
+						System.out.println("Client's address updated succesfully to: "+ad);
+						break;
+					}
+
+				}while(option!=6);
+				Client c=adminSystem.getClients().get(index);
+				adminSystem.getClients().remove(index);
+				adminSystem.addClient(c.getIdType(), c.getIdNumber(), c.getName(), c.getPhoneNumber(), c.getAddress());
+				
+			} catch (ClientNotFoundException cnfe) {
+				// TODO Auto-generated catch block
+				System.err.print(cnfe);
+				cnfe.printStackTrace();
+			}
+
+
+		} catch (IOException | NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void clientAdder() {
+
 		String[] clientInfo;
 
 		try {
@@ -193,6 +281,7 @@ public class Menu {
 			e.printStackTrace();
 		}
 	}
+	
 	public void restaurantAdder()  {
 		String[] resInfo;
 
@@ -257,7 +346,7 @@ public class Menu {
 		}
 		
 		//productAdder();
-		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
+		//System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
 		//productUpdater();
 		/*adminSystem.addRestaurant("Authentic Wings", 1098771, "Paco Perea");
 		adminSystem.addRestaurant("Zebra Flavor", 1098771, "Paco Perea");
@@ -285,8 +374,10 @@ public class Menu {
 		System.out.println(adminSystem.showClients());*/
 
 
-
-
+		System.out.println(adminSystem.showClients());
+		clientUpdater();
+		System.out.println(adminSystem.showClients());
+	
 		/*
 		clientAdder();
 		System.out.println(adminSystem.showClients());

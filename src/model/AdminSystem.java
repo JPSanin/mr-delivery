@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import exceptions.ClientNotFoundException;
 import exceptions.ProductNotFoundException;
 import exceptions.RestaurantNotFoundException;
 
@@ -26,8 +27,8 @@ public class AdminSystem {
 		restaurants= new ArrayList<Restaurant>();
 		clients=new ArrayList<Client>();
 	}
-	
-	
+
+	//****************************************************************************************
 	//Restaurant Methods
 	public int updateRestaurant(int taxID) throws RestaurantNotFoundException{
 		int search= taxID;
@@ -35,119 +36,39 @@ public class AdminSystem {
 		int index=0;
 		for (int i = 0; i < restaurants.size() && !found; i++) {
 			if(restaurants.get(i).getTaxID()==search) {
-			index=i;
-			found =true;
+				index=i;
+				found =true;
 			}
 		}
-		
+
 		if(found) {
 			return index;
 		}else {
 			throw new RestaurantNotFoundException(search);
 		}	
 	}
-	
+
 	public void orderRestaurants() {
 		RestaurantNameComparator rnc= new RestaurantNameComparator();
 		Collections.sort(restaurants, rnc);
 	}
-	
-	
+
 	public String showRestaurantsOptions() {
 		String info="";
 		for(int i=0; i<restaurants.size(); i++) {
 			if(i==restaurants.size()-1) {
 				info+=(i+1)+")"+restaurants.get(i).getName();		
 			}else {
-			info+=(i+1)+")"+restaurants.get(i).getName()+"\n";	
+				info+=(i+1)+")"+restaurants.get(i).getName()+"\n";	
 			}
 		}
 		return info;
 	}
-	
+
 	public String showRestaurants() {
 		String info="";
 		for(int i=0; i<restaurants.size(); i++) {
 			info+=restaurants.get(i)+"\n";	
-		}
-		return info;
-	}
-	
-	//Product Methods
-	//actualizar los datos de un producto dado su código
-	public int updateProduct(int c, int resIndex) throws ProductNotFoundException {
-		int search = c;
-		boolean found= false;
-		int index =0;
-		for (int i = 0; i < restaurants.get(resIndex).getMenuItems().size() && !found; i++) {
-			if(restaurants.get(resIndex).getMenuItems().get(i).getCode()==search) {
-			index=i;
-			found =true;
-			}
-		}
-		if(found) {
-			return index;
-		}else {
-			throw new ProductNotFoundException(search);
-		}	
-	}
-	
-	
-	public String showProducts(Restaurant r) {
-		String info="";
-		for(int i=0; i<r.getMenuItems().size(); i++) {
-			info+=r.getMenuItems().get(i)+"\n";	
-		}
-		return info;
-	}
-	
-	
-	public void updateClient() {}
-	public void updateOrder() {}
-	
-	
-
-	
-	public String printOrderedClientsByPhone() {
-		String info="";
-		ArrayList<Client> phoneClients= clients;
-		Collections.sort(phoneClients);
-		
-		for(int i=0; i<phoneClients.size(); i++) {
-			info+=phoneClients.get(i)+"\n";	
-		}
-		return info;
-	}
-	
-	
-
-	public void addClient(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
-		//Add in order using descendent name 
-		//Cuadrar condición
-		
-		Client c= new Client (idType,idNumber,name,phoneNumber,address);
-		
-		if(clients.isEmpty()) {
-			clients.add(c);
-		}else {
-			int i = 0;
-			while(i<clients.size() && (c.getName().compareTo(clients.get(i).getName())<=0)) {
-				i++;
-			}
-			
-			if(i==clients.size()) {
-			clients.add(c);	
-			}else {
-			clients.add(i,c);	
-			}
-			
-		}
-		
-	}
-	public String showClients() {
-		String info="";
-		for(int i=0; i<clients.size(); i++) {
-			info+=clients.get(i)+"\n";	
 		}
 		return info;
 	}
@@ -156,16 +77,6 @@ public class AdminSystem {
 		Restaurant r= new Restaurant (name, taxID, managerName);
 		restaurants.add(r);
 	}
-	
-	public void createOrder() {}
-	
-
-	
-
-	
-
-
-
 
 	public void saveRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_RES_SER);
@@ -173,7 +84,6 @@ public class AdminSystem {
 		oos.writeObject(restaurants);
 		oos.close();
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public void loadRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -186,6 +96,34 @@ public class AdminSystem {
 		}
 	}
 
+	
+	//****************************************************************************************
+	//Product Methods
+	//actualizar los datos de un producto dado su código
+	public int updateProduct(int c, int resIndex) throws ProductNotFoundException {
+		int search = c;
+		boolean found= false;
+		int index =0;
+		for (int i = 0; i < restaurants.get(resIndex).getMenuItems().size() && !found; i++) {
+			if(restaurants.get(resIndex).getMenuItems().get(i).getCode()==search) {
+				index=i;
+				found =true;
+			}
+		}
+		if(found) {
+			return index;
+		}else {
+			throw new ProductNotFoundException(search);
+		}	
+	}
+
+	public String showProducts(Restaurant r) {
+		String info="";
+		for(int i=0; i<r.getMenuItems().size(); i++) {
+			info+=r.getMenuItems().get(i)+"\n";	
+		}
+		return info;
+	}
 
 	public void saveProducts() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_PRO_SER);
@@ -196,7 +134,6 @@ public class AdminSystem {
 
 		oos.close();
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public void loadProducts() throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -212,13 +149,72 @@ public class AdminSystem {
 		}
 	}
 
+	//****************************************************************************************
+	//Client methods
+	public int updateClient(int docNum) throws ClientNotFoundException {
+		int search= docNum;
+		boolean found= false;
+		int index=0;
+		for (int i = 0; i < clients.size() && !found; i++) {
+			if(clients.get(i).getIdNumber()==search) {
+				index=i;
+				found =true;
+			}
+		}
+
+		if(found) {
+			return index;
+		}else {
+			throw new ClientNotFoundException(search);
+		}	
+	}
+	
+
+	public String printOrderedClientsByPhone() {
+		String info="";
+		ArrayList<Client> phoneClients= clients;
+		Collections.sort(phoneClients);
+
+		for(int i=0; i<phoneClients.size(); i++) {
+			info+=phoneClients.get(i)+"\n";	
+		}
+		return info;
+	}
+	
+	public void addClient(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
+		Client c= new Client (idType,idNumber,name,phoneNumber,address);
+		if(clients.isEmpty()) {
+			clients.add(c);
+		}else {
+			int i = 0;
+			while(i<clients.size() && (c.getName().compareTo(clients.get(i).getName())<=0)) {
+				i++;
+			}
+
+			if(i==clients.size()) {
+				clients.add(c);	
+			}else {
+				clients.add(i,c);	
+			}
+
+		}
+
+	}
+
+	public String showClients() {
+		String info="";
+		for(int i=0; i<clients.size(); i++) {
+			info+=clients.get(i)+"\n";	
+		}
+		return info;
+	}
+
 	public void saveClients() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_CLI_SER);
 		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
 		oos.writeObject(clients);
 		oos.close();
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public void loadClients() throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -231,8 +227,10 @@ public class AdminSystem {
 		}
 	}
 
-
-
+	//************************************************************************************
+	// Order methods
+	public void createOrder() {}
+	public void updateOrder() {}
 
 	public void saveOrders() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_ORD_SER);
@@ -259,9 +257,11 @@ public class AdminSystem {
 	}	
 
 	public void exportOrders() {}
-	
+
 	public void importData() {}
 
+	
+	//Gets and Sets
 	public ArrayList<Restaurant> getRestaurants() {
 		return restaurants;
 	}

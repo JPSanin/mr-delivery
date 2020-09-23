@@ -11,7 +11,6 @@ public class Client implements Serializable, Comparable<Client> {
 	private IdType idType;
 	private int idNumber;
 	private String name;
-	
 	private Long phoneNumber;
 	private String address;
 	private ArrayList<Order> order;
