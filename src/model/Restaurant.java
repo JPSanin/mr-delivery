@@ -27,6 +27,11 @@ public class Restaurant implements Serializable {
 		menuItems.add(p);
 	}
 	
+	public void addProduct(Product p) {
+		menuItems.add(p);
+	}
+	
+	
 	@Override
 	public String toString() {
 		String r = "";

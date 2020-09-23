@@ -18,6 +18,7 @@ public class Order implements Serializable {
 	private int resTaxId;
 	private Status status;
 	private ArrayList<Product> products;
+	private ArrayList<Integer> productQuantities;
 	
 	public Order(int clientID, int resTaxId) {
 		DateTimeFormatter formatter; 
@@ -28,30 +29,16 @@ public class Order implements Serializable {
 		this.resTaxId = resTaxId;
 		status=Status.REQUESTED;
 		products=new ArrayList<Product>();
+		productQuantities= new ArrayList<Integer>();
 	}
 	
 	public void generateCode(ArrayList<Client> clients) {
-		/*boolean isCodeDifferent= false;
-		boolean out=false;*/
 		code= (int) (Math.random()*10000000+1000);
-		/*do {
-			
-			for(int i=0; i< clients.size();i++) {
-				
-				for(int j=0; j< clients.get(i).getOrder().size() && out==false;i++) {
-				if(code==clients.get(i).getOrder().get(j).getCode()) {
-					isCodeDifferent=true;
-					out=true;
-				}
-				}
-			}
-			
-		}while(isCodeDifferent==true);*/
-		
 	}
 	
-	public void addProduct(Product p){
+	public void addProduct(Product p,int q){
 			products.add(p);
+			productQuantities.add(q);
 	}
 	
 	@Override
@@ -60,9 +47,9 @@ public class Order implements Serializable {
 		r+=code+";"+dateString+ ";"+clientID +";"+ resTaxId+ ";"+status+"\n";
 		for (int i = 0; i < products.size(); i++) {
 			if(i==products.size()-1) {
-				r+=products.get(i).toString();
+				r+=productQuantities.get(i)+";"+products.get(i).toString();
 			}else {
-				r+=products.get(i).toString()+"\n";
+				r+=productQuantities.get(i)+";"+products.get(i).toString()+"\n";
 			}
 		} 
 		return r;

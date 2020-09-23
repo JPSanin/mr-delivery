@@ -28,6 +28,7 @@ public class Menu {
 		int option=0;
 		int selection=0;
 		int exit=0;
+		int quantity=0;
 		boolean orderAgain=true;
 		int again=0;
 		int index1=0;
@@ -55,6 +56,7 @@ public class Menu {
 					}while(index2>adminSystem.getRestaurants().size() || index2<0);
 					
 					index2-=1;
+					
 					int id=adminSystem.getClients().get(index1).getIdNumber();
 					int resID=adminSystem.getRestaurants().get(index2).getTaxID();
 					
@@ -70,10 +72,13 @@ public class Menu {
 						System.out.println(exit+")"+"Exit");
 						selection= Integer.parseInt(br.readLine());
 						if(selection!=exit && selection<exit && selection>0) {
+							
+							System.out.println("Please enter how many of this product would you like to order");
+							quantity=Integer.parseInt(br.readLine());
 							Product p=adminSystem.getRestaurants().get(index2).getMenuItems().get(selection-1);
-							adminSystem.getClients().get(index1).getOrder().get(orderNumber).addProduct(p);
+							adminSystem.getClients().get(index1).getOrder().get(orderNumber).addProduct(p,quantity);
 							do {
-								System.out.println("Would you like to order another product?");
+								System.out.println("Would you like to add another product?");
 								System.out.println("1) Yes");
 								System.out.println("2) No");
 								again= Integer.parseInt(br.readLine());
@@ -107,6 +112,11 @@ public class Menu {
 		}
 
 	}
+	
+	/*public void addProductToOrder(int index1, int index2) {
+		
+	}*/
+	
 	
 	public void restaurantUpdater() {
 		int taxID=0;
@@ -402,18 +412,37 @@ public class Menu {
 		//Loading
 		try {
 			adminSystem.loadRestaurants();
-			adminSystem.loadProducts();
+			//adminSystem.loadProducts();
 			adminSystem.loadClients();
-			adminSystem.loadOrders();
+			//adminSystem.loadOrders();
 		} catch (ClassNotFoundException | IOException e) {
 
 			e.printStackTrace();
 		}
-		clientAdder();
+		
+		//******Test no serial orders/products
+		//restaurantAdder();
+		System.out.println(adminSystem.showRestaurants());
+		//restaurantAdder();
+		System.out.println(adminSystem.showRestaurants());
+		//productAdder();
+		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(0)));
+		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(1)));
+		//clientAdder();
+		//clientAdder();
 		System.out.println(adminSystem.showClients());
+		//orderCreator();
 		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
-		orderCreator();
-		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
+		//orderCreator();
+		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(1)));
+		//clientAdder();
+		
+		//System.out.println(adminSystem.showClients());
+		//System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
+		//System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(3)));
+		//System.out.println(adminSystem.showOrders(adminSystem.getClients().get(1)));
+		//orderCreator();
+		//System.out.println(adminSystem.showOrders(adminSystem.getClients().get(1)));
 		/*productAdder();
 		System.out.println(adminSystem.getRestaurants().get(2).getName());
 		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
@@ -460,9 +489,9 @@ public class Menu {
 		//Saving
 		try {
 			adminSystem.saveRestaurants();
-			adminSystem.saveProducts();
+			//adminSystem.saveProducts();
 			adminSystem.saveClients();
-			adminSystem.saveOrders();
+			//adminSystem.saveOrders();
 		} catch (ClassNotFoundException | IOException e) {
 
 			e.printStackTrace();
