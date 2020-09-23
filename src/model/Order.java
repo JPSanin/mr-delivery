@@ -41,6 +41,21 @@ public class Order implements Serializable {
 			productQuantities.add(q);
 	}
 	
+	
+	public String showProducts() {
+		String s="";
+		for (int i = 0; i < products.size(); i++) {
+			if(i==products.size()-1) {
+				s+=(i+1)+")"+productQuantities.get(i)+";"+products.get(i).toString();
+			}else {
+				s+=(i+1)+")"+productQuantities.get(i)+";"+products.get(i).toString()+"\n";
+			}
+		}
+		return s;
+	}
+	
+	
+
 	@Override
 	public String toString() {
 		String r = "";
@@ -101,5 +116,12 @@ public class Order implements Serializable {
 		return products;
 	}
 	
+	public ArrayList<Integer> getProductQuantities() {
+		return productQuantities;
+	}
+
+	public void setProductQuantities(ArrayList<Integer> productQuantities) {
+		this.productQuantities = productQuantities;
+	}
 	
 }

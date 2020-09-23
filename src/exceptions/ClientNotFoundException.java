@@ -9,7 +9,7 @@ public class ClientNotFoundException extends Exception{
 	
 	
 	public ClientNotFoundException( int docNum) {
-		super("Cannot Find Client with: "+docNum);
+		super("Cannot Find Client with document number: "+docNum);
 		
 	}
 }

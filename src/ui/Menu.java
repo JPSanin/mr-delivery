@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import exceptions.ClientNotFoundException;
+import exceptions.OrderNotFoundException;
 import exceptions.ProductNotFoundException;
 import exceptions.RestaurantNotFoundException;
 import model.AdminSystem;
@@ -26,11 +27,7 @@ public class Menu {
 	public void orderCreator() {
 		
 		int option=0;
-		int selection=0;
-		int exit=0;
-		int quantity=0;
-		boolean orderAgain=true;
-		int again=0;
+		
 		int index1=0;
 		int index2=0;
 		try {
@@ -56,45 +53,12 @@ public class Menu {
 					}while(index2>adminSystem.getRestaurants().size() || index2<0);
 					
 					index2-=1;
-					
 					int id=adminSystem.getClients().get(index1).getIdNumber();
 					int resID=adminSystem.getRestaurants().get(index2).getTaxID();
-					
 					adminSystem.getClients().get(index1).addOrder(id, resID);
 					int orderNumber=adminSystem.getClients().get(index1).getOrder().size()-1;
 					adminSystem.getClients().get(index1).getOrder().get(orderNumber).generateCode(adminSystem.getClients());
-					exit=adminSystem.getRestaurants().get(index2).getMenuItems().size()+1;
-					
-					do {
-						
-						System.out.println("Please select products to add to order");
-						System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(index2)));
-						System.out.println(exit+")"+"Exit");
-						selection= Integer.parseInt(br.readLine());
-						if(selection!=exit && selection<exit && selection>0) {
-							
-							System.out.println("Please enter how many of this product would you like to order");
-							quantity=Integer.parseInt(br.readLine());
-							Product p=adminSystem.getRestaurants().get(index2).getMenuItems().get(selection-1);
-							adminSystem.getClients().get(index1).getOrder().get(orderNumber).addProduct(p,quantity);
-							do {
-								System.out.println("Would you like to add another product?");
-								System.out.println("1) Yes");
-								System.out.println("2) No");
-								again= Integer.parseInt(br.readLine());
-							}while (again<0 || again>2);
-							if (again==1) {
-								orderAgain=true;
-							}else if(again==2){
-								orderAgain=false;
-							}
-							
-						}
-						
-						
-					}while(selection!=exit && orderAgain==true);
-					System.out.println("Order creation finished");
-					
+					addProductToOrder(index1, index2, orderNumber);
 					
 					
 				} catch (ClientNotFoundException e) {
@@ -113,10 +77,145 @@ public class Menu {
 
 	}
 	
-	/*public void addProductToOrder(int index1, int index2) {
+	public void addProductToOrder(int index1, int index2, int orderNumber) throws NumberFormatException, IOException {
 		
-	}*/
+		int selection=0;
+		int exit=0;
+		int quantity=0;
+		boolean orderAgain=true;
+		int again=0;
 	
+		exit=adminSystem.getRestaurants().get(index2).getMenuItems().size()+1;
+		
+		do {
+			
+			System.out.println("Please select products to add to order");
+			System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(index2)));
+			System.out.println(exit+")"+"Exit");
+			selection= Integer.parseInt(br.readLine());
+			if(selection!=exit && selection<exit && selection>0) {
+				
+				System.out.println("Please enter how many of this product would you like to order");
+				quantity=Integer.parseInt(br.readLine());
+				Product p=adminSystem.getRestaurants().get(index2).getMenuItems().get(selection-1);
+				adminSystem.getClients().get(index1).getOrder().get(orderNumber).addProduct(p,quantity);
+				do {
+					System.out.println("Would you like to add another product?");
+					System.out.println("1) Yes");
+					System.out.println("2) No");
+					again= Integer.parseInt(br.readLine());
+				}while (again<0 || again>2);
+				if (again==1) {
+					orderAgain=true;
+				}else if(again==2){
+					orderAgain=false;
+				}
+				
+			}
+			
+			
+		}while(selection!=exit && orderAgain==true);
+		System.out.println("Order creation finished");
+		
+	}
+	
+	public void orderUpdater() {
+		int code=0;
+		int index1 = 0;
+		int index2 = 0;
+		int select=0;
+		int select2=0;
+		
+		int option;
+		try {
+			System.out.println("Please enter the client document number of the person whose order you want to update");
+			int docNum= Integer.parseInt(br.readLine());
+			
+			try {
+				index1=adminSystem.searchClient(docNum);
+				System.out.println("Please enter the order's code");
+				code=Integer.parseInt(br.readLine());
+				try {
+					index2=adminSystem.searchOrder(code,index1);
+					
+					do {
+						
+						System.out.println("Please select the information you want to update");
+						System.out.println("1) Order Code");
+						System.out.println("2) Order Products Quantity");
+						System.out.println("3) Add Product");
+						System.out.println("4) Remove Product");
+						System.out.println("5) Exit");
+						option= Integer.parseInt(br.readLine());
+
+						switch(option) {
+						case 1: 
+							System.out.println("Please enter new order code");
+							int c=Integer.parseInt(br.readLine());
+							adminSystem.getClients().get(index1).getOrder().get(index2).setCode(c);
+							System.out.println("Product code updated succesfully to: "+c);
+							break;
+						case 2:
+							System.out.println("Please select product to update quantity");
+							int exitProducts=adminSystem.getClients().get(index1).getOrder().get(index2).getProducts().size()+1;
+							do {
+								String ps=adminSystem.getClients().get(index1).getOrder().get(index2).showProducts();
+								System.out.println(ps);
+								System.out.println(exitProducts+") Exit");
+								select=Integer.parseInt(br.readLine());
+							}while(select>exitProducts || select<0 );
+							select-=1;
+							System.out.println("Please enter the new product quantity");
+							int pq= Integer.parseInt(br.readLine());
+							adminSystem.getClients().get(index1).getOrder().get(index2).getProductQuantities().set(select,pq);
+							System.out.println("Product quantity updated succesfully to: "+pq);
+							
+							break;
+						case 3:
+							int resTaxId=adminSystem.getClients().get(index1).getOrder().get(index2).getResTaxId();
+							int resPos;
+							try {
+								resPos = adminSystem.searchRestaurant(resTaxId);
+								addProductToOrder(index1, resPos, index2);
+							} catch (RestaurantNotFoundException e) {
+								System.err.print(e);
+								e.printStackTrace();
+							}
+							
+							break;	
+						case 4:
+							System.out.println("Please select product to remove");
+							int exitProducts2=adminSystem.getClients().get(index1).getOrder().get(index2).getProducts().size()+1;
+							do {
+								String ps=adminSystem.getClients().get(index1).getOrder().get(index2).showProducts();
+								System.out.println(ps);
+								System.out.println(exitProducts2+") Exit");
+								select2=Integer.parseInt(br.readLine());
+							}while(select2>exitProducts2 || select2<0 );
+							select2-=1;
+					
+							adminSystem.getClients().get(index1).getOrder().get(index2).getProducts().remove(select2);
+							adminSystem.getClients().get(index1).getOrder().get(index2).getProductQuantities().remove(select2);
+							System.out.println("Product removed succesfully");
+							break;
+						}
+
+					}while(option!=5);
+					
+				} catch (OrderNotFoundException e) {
+					System.err.print(e);
+					e.printStackTrace();
+				}
+			} catch (ClientNotFoundException cnfe) {
+				System.err.print(cnfe);
+				cnfe.printStackTrace();
+			}
+			
+		} catch (IOException | NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public void restaurantUpdater() {
 		int taxID=0;
@@ -189,7 +288,7 @@ public class Menu {
 				index1-=1;
 			
 			
-			System.out.println("Please enter the products's code");
+			System.out.println("Please enter the product's code");
 			code=Integer.parseInt(br.readLine());
 			try {
 				index2=adminSystem.searchProduct(code,index1);
@@ -422,19 +521,20 @@ public class Menu {
 		
 		//******Test no serial orders/products
 		//restaurantAdder();
-		System.out.println(adminSystem.showRestaurants());
+		//System.out.println(adminSystem.showRestaurants());
 		//restaurantAdder();
-		System.out.println(adminSystem.showRestaurants());
+		//System.out.println(adminSystem.showRestaurants());
 		//productAdder();
 		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(0)));
-		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(1)));
+		//System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(1)));
 		//clientAdder();
 		//clientAdder();
+		productAdder();
 		System.out.println(adminSystem.showClients());
-		//orderCreator();
+		orderUpdater();
 		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
 		//orderCreator();
-		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(1)));
+		//System.out.println(adminSystem.showOrders(adminSystem.getClients().get(1)));
 		//clientAdder();
 		
 		//System.out.println(adminSystem.showClients());

@@ -11,15 +11,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import exceptions.ClientNotFoundException;
+import exceptions.OrderNotFoundException;
 import exceptions.ProductNotFoundException;
 import exceptions.RestaurantNotFoundException;
 
 
 public class AdminSystem {
 	public final static String FILE_RES_SER= "data/infoRestaurant.dat";
-	public final static String FILE_PRO_SER= "data/infoProduct.dat";
+	//public final static String FILE_PRO_SER= "data/infoProduct.dat";
 	public final static String FILE_CLI_SER= "data/infoClient.dat";
-	public final static String FILE_ORD_SER= "data/infoOrder.dat";
+	//public final static String FILE_ORD_SER= "data/infoOrder.dat";
 	private ArrayList<Restaurant> restaurants;
 	private ArrayList<Client> clients;
 
@@ -128,7 +129,7 @@ public class AdminSystem {
 		}
 		return info;
 	}
-
+/*
 	public void saveProducts() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_PRO_SER);
 		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
@@ -151,7 +152,7 @@ public class AdminSystem {
 
 			ois.close();
 		}
-	}
+	}*/
 
 	//****************************************************************************************
 	//Client methods
@@ -233,7 +234,22 @@ public class AdminSystem {
 
 	//************************************************************************************
 	// Order methods
-	public void updateOrder() {}
+	public int searchOrder(int c, int cliIndex) throws OrderNotFoundException {
+		int search = c;
+		boolean found= false;
+		int index =0;
+		for (int i = 0; i < clients.get(cliIndex).getOrder().size() && !found; i++) {
+			if(clients.get(cliIndex).getOrder().get(i).getCode()==search) {
+				index=i;
+				found =true;
+			}
+		}
+		if(found) {
+			return index;
+		}else {
+			throw new OrderNotFoundException(search);
+		}	
+	}
 	
 	public String showOrders(Client c) {
 		String info="";
@@ -247,6 +263,7 @@ public class AdminSystem {
 		return info;
 	}
 	
+	/*
 	public void saveOrders() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_ORD_SER);
 		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
@@ -269,7 +286,7 @@ public class AdminSystem {
 			}
 			ois.close();
 		}
-	}	
+	}	*/
 
 	public void exportOrders() {}
 
