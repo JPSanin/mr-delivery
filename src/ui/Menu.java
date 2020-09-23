@@ -3,21 +3,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import exceptions.ProductNotFoundException;
 import exceptions.RestaurantNotFoundException;
 import model.AdminSystem;
 import model.IdType;
-import model.Restaurant;
+
 
 public class Menu {
 
 	private AdminSystem adminSystem;
 	private BufferedReader br;
-	
+
 	public Menu() {
 		adminSystem= new AdminSystem();
 		br= new BufferedReader(new InputStreamReader(System.in));
 	}
-	
+
 	/* Luego lo armas, primero lista ordenada de restaurantes
 	 * luego lista ordenada de clientes
 	public void orderCreator() {
@@ -31,12 +32,12 @@ public class Menu {
 			System.out.println("2) no");
 			option= Integer.parseInt(br.readLine());
 			}while(option!=1 || option!=2);
-			
+
 		} catch (IOException | NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}*/
 	public void restaurantUpdater() {
 		int taxID=0;
@@ -45,17 +46,17 @@ public class Menu {
 		try {
 			System.out.println("Please enter the restaurant's tax ID");
 			taxID=Integer.parseInt(br.readLine());
-			
-		try {
-			 index=adminSystem.updateRestaurant(taxID);
-			 do {
+
+			try {
+				index=adminSystem.updateRestaurant(taxID);
+				do {
 					System.out.println("Please select the information you want to update");
 					System.out.println("1) Restaurant Name");
 					System.out.println("2) Restaurant Tax Id");
 					System.out.println("3) Restaurant's Manager Name");
 					System.out.println("4) Exit");
 					option= Integer.parseInt(br.readLine());
-					
+
 					switch(option) {
 					case 1: 
 						System.out.println("Please enter new restaurant name");
@@ -73,26 +74,106 @@ public class Menu {
 						System.out.println("Please enter new Manager name");
 						String mang= br.readLine();
 						adminSystem.getRestaurants().get(index).setManagerName(mang);
-						System.out.println("Restaurant taxID updated succesfully to: "+mang);
+						System.out.println("Restaurant Manager name updated succesfully to: "+mang);
 						break;	
 					}
-					
+
 				}while(option!=4);
-			 adminSystem.orderRestaurants();
-		} catch (RestaurantNotFoundException rnfe) {
-			// TODO Auto-generated catch block
-			System.err.print(rnfe);
-			rnfe.printStackTrace();
-		}
-		
-		
+				adminSystem.orderRestaurants();
+			} catch (RestaurantNotFoundException rnfe) {
+				// TODO Auto-generated catch block
+				System.err.print(rnfe);
+				rnfe.printStackTrace();
+			}
+
+
 		} catch (IOException | NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
+	public void productUpdater() {
+		int code=0;
+		int index1 = 0;
+		int index2 = 0;
+		
+		
+		int option;
+		try {
+
+
+			
+				System.out.println("Please select the restaurant whose product's you want to update");
+				System.out.println(adminSystem.showRestaurantsOptions());
+				
+				index1= Integer.parseInt(br.readLine());
+			
+			
+			System.out.println("Please enter the products's code");
+			code=Integer.parseInt(br.readLine());
+			try {
+				index2=adminSystem.updateProduct(code,index1);
+				do {
+					/*
+					 * 	private int code;
+						private String name;
+						private String description;
+						private double price;
+						private int resTaxID;*/
+					System.out.println("Please select the information you want to update");
+					System.out.println("1) Product Code");
+					System.out.println("2) Product Name");
+					System.out.println("3) Product Description");
+					System.out.println("4) Product Price");
+					System.out.println("5) Exit");
+					option= Integer.parseInt(br.readLine());
+
+					switch(option) {
+					case 1: 
+						System.out.println("Please enter new product code");
+						int c=Integer.parseInt(br.readLine());
+						adminSystem.getRestaurants().get(index1).getMenuItems().get(index2).setCode(c);
+						System.out.println("Product code updated succesfully to: "+c);
+						break;
+					case 2:
+						System.out.println("Please enter new product name");
+						String name= br.readLine();
+						adminSystem.getRestaurants().get(index1).getMenuItems().get(index2).setName(name);
+						System.out.println("Product name updated succesfully to: "+name);
+						break;
+					case 3:
+						System.out.println("Please enter new Product description");
+						String desc= br.readLine();
+						adminSystem.getRestaurants().get(index1).getMenuItems().get(index2).setDescription(desc);
+						System.out.println("Product description updated succesfully to: "+desc);
+						break;	
+					case 4:
+						System.out.println("Please enter new Product price");
+						Double p= Double.parseDouble(br.readLine());
+						adminSystem.getRestaurants().get(index1).getMenuItems().get(index2).setPrice(p);
+						System.out.println("Product description updated succesfully to: "+p);
+						break;
+					}
+
+				}while(option!=5);
+				
+			} catch (ProductNotFoundException pnfe) {
+				// TODO Auto-generated catch block
+				System.err.print(pnfe);
+				pnfe.printStackTrace();
+			}
+
+
+
+
+		} catch (IOException | NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void clientAdder() {
 		String[] clientInfo;
 
@@ -137,10 +218,11 @@ public class Menu {
 		do {
 			System.out.println("Please select the restaurant that you want to add products to");
 
-			for (int i = 0; i<adminSystem.getRestaurants().size(); i++) {
-				System.out.println((i+1)+") "+adminSystem.getRestaurants().get(i).getName());
-			}
-			System.out.println(exit+") "+"Exit");
+			
+				System.out.println(adminSystem.showRestaurantsOptions());
+				System.out.println(exit+")"+" Exit");
+			
+			
 
 			try {
 				option=Integer.parseInt(br.readLine());
@@ -174,6 +256,9 @@ public class Menu {
 			e.printStackTrace();
 		}
 		
+		//productAdder();
+		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
+		//productUpdater();
 		/*adminSystem.addRestaurant("Authentic Wings", 1098771, "Paco Perea");
 		adminSystem.addRestaurant("Zebra Flavor", 1098771, "Paco Perea");
 		adminSystem.addRestaurant("Sushi Green", 4641651, "Dongjoon Lee");
@@ -184,10 +269,13 @@ public class Menu {
 		adminSystem.orderRestaurants();
 		System.out.println("After");
 		System.out.println(adminSystem.showRestaurants());*/
-	
+
+		
+		
+		/*
 		System.out.println(adminSystem.showRestaurants());
 		restaurantUpdater();
-		System.out.println(adminSystem.showRestaurants());
+		System.out.println(adminSystem.showRestaurants());*/
 		/*adminSystem.addClient(IdType.PASSPORT, 4646511,"Collin Sherman", 2128885471L,"Elms Street 342");
 		adminSystem.addClient(IdType.ID, 9848486,"Dustin Jhonson",7874541232L ,"Carmelo Dr 876");
 		adminSystem.addClient(IdType.LICENSE, 42487212,"Bryson DeChambeau",3187287349L ,"Natty Ave 784");
@@ -195,10 +283,10 @@ public class Menu {
 		adminSystem.addClient(IdType.LICENSE, 42487212,"Sebastian Muñoz", 4795683241L,"Colo Street 151");
 		System.out.println("ordered by name");
 		System.out.println(adminSystem.showClients());*/
-		
-		
-		
-	
+
+
+
+
 		/*
 		clientAdder();
 		System.out.println(adminSystem.showClients());
@@ -213,7 +301,7 @@ public class Menu {
 			adminSystem.saveProducts();
 			adminSystem.saveClients();
 		} catch (ClassNotFoundException | IOException e) {
-			
+
 			e.printStackTrace();
 		}
 	}

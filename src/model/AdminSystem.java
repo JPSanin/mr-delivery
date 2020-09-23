@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import exceptions.ProductNotFoundException;
 import exceptions.RestaurantNotFoundException;
 
 
@@ -25,7 +26,9 @@ public class AdminSystem {
 		restaurants= new ArrayList<Restaurant>();
 		clients=new ArrayList<Client>();
 	}
-	//El programa debe tener la posibilidad de actualizar los datos de un restaurante dado el nit
+	
+	
+	//Restaurant Methods
 	public int updateRestaurant(int taxID) throws RestaurantNotFoundException{
 		int search= taxID;
 		boolean found= false;
@@ -48,8 +51,62 @@ public class AdminSystem {
 		RestaurantNameComparator rnc= new RestaurantNameComparator();
 		Collections.sort(restaurants, rnc);
 	}
-	public void updateProduct() {}
+	
+	
+	public String showRestaurantsOptions() {
+		String info="";
+		for(int i=0; i<restaurants.size(); i++) {
+			if(i==restaurants.size()-1) {
+				info+=(i+1)+")"+restaurants.get(i).getName();		
+			}else {
+			info+=(i+1)+")"+restaurants.get(i).getName()+"\n";	
+			}
+		}
+		return info;
+	}
+	
+	public String showRestaurants() {
+		String info="";
+		for(int i=0; i<restaurants.size(); i++) {
+			info+=restaurants.get(i)+"\n";	
+		}
+		return info;
+	}
+	
+	//Product Methods
+	//actualizar los datos de un producto dado su código
+	public int updateProduct(int c, int resIndex) throws ProductNotFoundException {
+		int search = c;
+		boolean found= false;
+		int index =0;
+		for (int i = 0; i < restaurants.get(resIndex).getMenuItems().size() && !found; i++) {
+			if(restaurants.get(resIndex).getMenuItems().get(i).getCode()==search) {
+			index=i;
+			found =true;
+			}
+		}
+		if(found) {
+			return index;
+		}else {
+			throw new ProductNotFoundException(search);
+		}	
+	}
+	
+	
+	public String showProducts(Restaurant r) {
+		String info="";
+		for(int i=0; i<r.getMenuItems().size(); i++) {
+			info+=r.getMenuItems().get(i)+"\n";	
+		}
+		return info;
+	}
+	
+	
 	public void updateClient() {}
+	public void updateOrder() {}
+	
+	
+
 	
 	public String printOrderedClientsByPhone() {
 		String info="";
@@ -62,7 +119,7 @@ public class AdminSystem {
 		return info;
 	}
 	
-	public void updateOrder() {}
+	
 
 	public void addClient(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
 		//Add in order using descendent name 
@@ -103,21 +160,9 @@ public class AdminSystem {
 	public void createOrder() {}
 	
 
-	public String showRestaurants() {
-		String info="";
-		for(int i=0; i<restaurants.size(); i++) {
-			info+=restaurants.get(i)+"\n";	
-		}
-		return info;
-	}
+	
 
-	public String showProducts(Restaurant r) {
-		String info="";
-		for(int i=0; i<r.getMenuItems().size(); i++) {
-			info+=r.getMenuItems().get(i)+"\n";	
-		}
-		return info;
-	}
+	
 
 
 
