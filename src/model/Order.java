@@ -1,21 +1,26 @@
 package model;
+import java.io.Serializable;
 import java.time.LocalDateTime; // Import the LocalDateTime class
 import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
 import java.util.ArrayList;
 
-public class Order {
+public class Order implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int code;
 	private LocalDateTime date;
 	private String dateString;
-	private DateTimeFormatter formatter; 
+	
 	private int clientID;
 	private int resTaxId;
 	private Status status;
 	private ArrayList<Product> products;
 	
 	public Order(int clientID, int resTaxId) {
-		
+		DateTimeFormatter formatter; 
 		date = LocalDateTime.now();
 		formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		dateString = date.format(formatter);
@@ -26,10 +31,11 @@ public class Order {
 	}
 	
 	public void generateCode(ArrayList<Client> clients) {
-		boolean isCodeDifferent= false;
-		boolean out=false;
-		do {
-			code= (int) (Math.random()*10000000+1000);
+		/*boolean isCodeDifferent= false;
+		boolean out=false;*/
+		code= (int) (Math.random()*10000000+1000);
+		/*do {
+			
 			for(int i=0; i< clients.size();i++) {
 				
 				for(int j=0; j< clients.get(i).getOrder().size() && out==false;i++) {
@@ -40,11 +46,27 @@ public class Order {
 				}
 			}
 			
-		}while(isCodeDifferent==true);
+		}while(isCodeDifferent==true);*/
 		
 	}
 	
-	public void addProduct(){}
+	public void addProduct(Product p){
+			products.add(p);
+	}
+	
+	@Override
+	public String toString() {
+		String r = "";
+		r+=code+";"+dateString+ ";"+clientID +";"+ resTaxId+ ";"+status+"\n";
+		for (int i = 0; i < products.size(); i++) {
+			if(i==products.size()-1) {
+				r+=products.get(i).toString();
+			}else {
+				r+=products.get(i).toString()+"\n";
+			}
+		} 
+		return r;
+	}
 	
 	public void modifyStatus() {}
 	

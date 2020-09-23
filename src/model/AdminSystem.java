@@ -30,7 +30,7 @@ public class AdminSystem {
 
 	//****************************************************************************************
 	//Restaurant Methods
-	public int updateRestaurant(int taxID) throws RestaurantNotFoundException{
+	public int searchRestaurant(int taxID) throws RestaurantNotFoundException{
 		int search= taxID;
 		boolean found= false;
 		int index=0;
@@ -100,7 +100,7 @@ public class AdminSystem {
 	//****************************************************************************************
 	//Product Methods
 	//actualizar los datos de un producto dado su código
-	public int updateProduct(int c, int resIndex) throws ProductNotFoundException {
+	public int searchProduct(int c, int resIndex) throws ProductNotFoundException {
 		int search = c;
 		boolean found= false;
 		int index =0;
@@ -120,7 +120,11 @@ public class AdminSystem {
 	public String showProducts(Restaurant r) {
 		String info="";
 		for(int i=0; i<r.getMenuItems().size(); i++) {
-			info+=r.getMenuItems().get(i)+"\n";	
+			if(i==r.getMenuItems().size()-1) {
+				info+=(i+1)+") "+r.getMenuItems().get(i);	
+			}else {
+				info+=(i+1)+") "+r.getMenuItems().get(i)+"\n";	
+			}
 		}
 		return info;
 	}
@@ -151,7 +155,7 @@ public class AdminSystem {
 
 	//****************************************************************************************
 	//Client methods
-	public int updateClient(int docNum) throws ClientNotFoundException {
+	public int searchClient(int docNum) throws ClientNotFoundException {
 		int search= docNum;
 		boolean found= false;
 		int index=0;
@@ -229,9 +233,20 @@ public class AdminSystem {
 
 	//************************************************************************************
 	// Order methods
-	public void createOrder() {}
 	public void updateOrder() {}
-
+	
+	public String showOrders(Client c) {
+		String info="";
+		for(int i=0; i<c.getOrder().size(); i++) {
+			if(i==c.getOrder().size()-1) {
+				info+=c.getOrder().get(i);	
+			}else {
+				info+=c.getOrder().get(i)+"\n";	
+			}
+		}
+		return info;
+	}
+	
 	public void saveOrders() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_ORD_SER);
 		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));

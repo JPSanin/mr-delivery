@@ -9,6 +9,7 @@ import exceptions.RestaurantNotFoundException;
 import model.AdminSystem;
 import model.Client;
 import model.IdType;
+import model.Product;
 
 
 public class Menu {
@@ -21,11 +22,16 @@ public class Menu {
 		br= new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	/* Luego lo armas, primero lista ordenada de restaurantes
-	 * luego lista ordenada de clientes
+	 
 	public void orderCreator() {
-		String[] orderInfo;
+		
 		int option=0;
+		int selection=0;
+		int exit=0;
+		boolean orderAgain=true;
+		int again=0;
+		int index1=0;
+		int index2=0;
 		try {
 			System.out.println("Order Creation Started...");
 			do {
@@ -33,14 +39,75 @@ public class Menu {
 			System.out.println("1) yes");
 			System.out.println("2) no");
 			option= Integer.parseInt(br.readLine());
-			}while(option!=1 || option!=2);
+			}while(option<0 || option>2);
+			
+			if (option==1) {
+				System.out.println("Please enter client document number");
+				int dc=Integer.parseInt(br.readLine());
+				try {
+					index1=adminSystem.searchClient(dc);
+					do {
+						
+						System.out.println("Please select the restaurant you want to order from");
+						System.out.println(adminSystem.showRestaurantsOptions());
+						index2= Integer.parseInt(br.readLine());
+						
+					}while(index2>adminSystem.getRestaurants().size() || index2<0);
+					
+					index2-=1;
+					int id=adminSystem.getClients().get(index1).getIdNumber();
+					int resID=adminSystem.getRestaurants().get(index2).getTaxID();
+					
+					adminSystem.getClients().get(index1).addOrder(id, resID);
+					int orderNumber=adminSystem.getClients().get(index1).getOrder().size()-1;
+					adminSystem.getClients().get(index1).getOrder().get(orderNumber).generateCode(adminSystem.getClients());
+					exit=adminSystem.getRestaurants().get(index2).getMenuItems().size()+1;
+					
+					do {
+						
+						System.out.println("Please select products to add to order");
+						System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(index2)));
+						System.out.println(exit+")"+"Exit");
+						selection= Integer.parseInt(br.readLine());
+						if(selection!=exit && selection<exit && selection>0) {
+							Product p=adminSystem.getRestaurants().get(index2).getMenuItems().get(selection-1);
+							adminSystem.getClients().get(index1).getOrder().get(orderNumber).addProduct(p);
+							do {
+								System.out.println("Would you like to order another product?");
+								System.out.println("1) Yes");
+								System.out.println("2) No");
+								again= Integer.parseInt(br.readLine());
+							}while (again<0 || again>2);
+							if (again==1) {
+								orderAgain=true;
+							}else if(again==2){
+								orderAgain=false;
+							}
+							
+						}
+						
+						
+					}while(selection!=exit && orderAgain==true);
+					System.out.println("Order creation finished");
+					
+					
+					
+				} catch (ClientNotFoundException e) {
+					System.err.print(e);
+					e.printStackTrace();
+				}
+			}else if(option==2){
+				System.out.println("Please Register Client");
+				clientAdder();
+			}
 
 		} catch (IOException | NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-	}*/
+	}
+	
 	public void restaurantUpdater() {
 		int taxID=0;
 		int index = 0;
@@ -50,7 +117,7 @@ public class Menu {
 			taxID=Integer.parseInt(br.readLine());
 
 			try {
-				index=adminSystem.updateRestaurant(taxID);
+				index=adminSystem.searchRestaurant(taxID);
 				do {
 					System.out.println("Please select the information you want to update");
 					System.out.println("1) Restaurant Name");
@@ -103,24 +170,21 @@ public class Menu {
 		
 		int option;
 		try {
-
-				System.out.println("Please select the restaurant whose product's you want to update");
-				System.out.println(adminSystem.showRestaurantsOptions());
-				
-				index1= Integer.parseInt(br.readLine());
+				do {
+					System.out.println("Please select the restaurant whose product's you want to update");
+					System.out.println(adminSystem.showRestaurantsOptions());
+					
+					index1= Integer.parseInt(br.readLine());
+				}while(index1>adminSystem.getRestaurants().size() && index1<0);
+				index1-=1;
 			
 			
 			System.out.println("Please enter the products's code");
 			code=Integer.parseInt(br.readLine());
 			try {
-				index2=adminSystem.updateProduct(code,index1);
+				index2=adminSystem.searchProduct(code,index1);
 				do {
-					/*
-					 * 	private int code;
-						private String name;
-						private String description;
-						private double price;
-						private int resTaxID;*/
+					
 					System.out.println("Please select the information you want to update");
 					System.out.println("1) Product Code");
 					System.out.println("2) Product Name");
@@ -182,7 +246,7 @@ public class Menu {
 			docNum=Integer.parseInt(br.readLine());
 
 			try {
-				index=adminSystem.updateClient(docNum);
+				index=adminSystem.searchClient(docNum);
 				do {
 					 
 					System.out.println("Please select the client's information you want to update");
@@ -340,14 +404,21 @@ public class Menu {
 			adminSystem.loadRestaurants();
 			adminSystem.loadProducts();
 			adminSystem.loadClients();
+			adminSystem.loadOrders();
 		} catch (ClassNotFoundException | IOException e) {
 
 			e.printStackTrace();
 		}
-		
-		//productAdder();
-		//System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
-		//productUpdater();
+		clientAdder();
+		System.out.println(adminSystem.showClients());
+		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
+		orderCreator();
+		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
+		/*productAdder();
+		System.out.println(adminSystem.getRestaurants().get(2).getName());
+		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
+		productUpdater();
+		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
 		/*adminSystem.addRestaurant("Authentic Wings", 1098771, "Paco Perea");
 		adminSystem.addRestaurant("Zebra Flavor", 1098771, "Paco Perea");
 		adminSystem.addRestaurant("Sushi Green", 4641651, "Dongjoon Lee");
@@ -373,7 +444,7 @@ public class Menu {
 		System.out.println("ordered by name");
 		System.out.println(adminSystem.showClients());*/
 
-
+/*
 		System.out.println(adminSystem.showClients());
 		clientUpdater();
 		System.out.println(adminSystem.showClients());
@@ -391,6 +462,7 @@ public class Menu {
 			adminSystem.saveRestaurants();
 			adminSystem.saveProducts();
 			adminSystem.saveClients();
+			adminSystem.saveOrders();
 		} catch (ClassNotFoundException | IOException e) {
 
 			e.printStackTrace();

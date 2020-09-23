@@ -35,7 +35,10 @@ public class Client implements Serializable, Comparable<Client> {
 	}
 	
 
-	public void addOrder() {}
+	public void addOrder(int clientId, int resTaxId) {
+		Order o= new Order (clientId, resTaxId);
+		order.add(o);		
+	}
 
 	@Override
 	public String toString() {
