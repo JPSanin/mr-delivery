@@ -75,6 +75,8 @@ public class Menu {
 					break;
 				case 9:
 					efficientClientFinder();
+					
+					
 					break;
 				case 10:
 					System.out.println("Not implemented yet");
@@ -102,10 +104,16 @@ public class Menu {
 			String name= br.readLine();
 			try {
 				//Start time
+				long startTime=System.currentTimeMillis();
 				int index= adminSystem.searchClientName(name);
+				long stopTime=System.currentTimeMillis();
 				System.out.println("Client Found:");
 				System.out.println(adminSystem.getClients().get(index));
 				//End time
+				long elapsedTime1=stopTime-startTime;
+				double elapsedTime= (stopTime-startTime)/(double)1000;
+				System.out.println("Time it took in milliseconds: "+ elapsedTime1);
+				System.out.println("Time it took in seconds: "+ elapsedTime);
 			} catch (ClientNotFoundException e) {
 				System.err.print(e);
 				e.printStackTrace();

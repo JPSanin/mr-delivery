@@ -205,26 +205,7 @@ public class AdminSystem {
 		
 		
 	}
-	public static boolean binarySearcher(int searchValue, int[] array) {
-		boolean found = false;
-		int start=0;
-		int end= array.length-1;
-		
-		while(start<=end && !found) {
-			
-			int mid= (start+end)/2;
-			if(array[mid]==searchValue) {
-				found=true;
-			}else if(array[mid]>searchValue) {
-				end= mid-1;
-			}else {
-				start=mid+1;	
-			}
-			
-		}
-		return found;
-		
-	}
+	
 
 	public String printOrderedClientsByPhone() {
 		String info="";
