@@ -40,7 +40,7 @@ public class Menu {
 			System.out.println("6) Update Information");
 			System.out.println("7) Display Restaurants Ordered by Name");
 			System.out.println("8) Display Clients Ordered by Phone");
-			System.out.println("9) Find a Client");
+			System.out.println("9) Find a Client Efficiently");
 			System.out.println("10) Export Data");
 			System.out.println("11) Import Data");
 			System.out.println("12) Exit Program");
@@ -74,7 +74,7 @@ public class Menu {
 					System.out.println(adminSystem.printOrderedClientsByPhone());
 					break;
 				case 9:
-					System.out.println("Not implemented yet");
+					efficientClientFinder();
 					break;
 				case 10:
 					System.out.println("Not implemented yet");
@@ -95,6 +95,27 @@ public class Menu {
 		System.out.println("Thank you for using Mr Delivery, See you soon :)");
 	}
 	
+	
+	public void efficientClientFinder() {
+		System.out.println("Please enter the client Name (FirstName LastName)");
+		try {
+			String name= br.readLine();
+			try {
+				//Start time
+				int index= adminSystem.searchClientName(name);
+				System.out.println("Client Found:");
+				System.out.println(adminSystem.getClients().get(index));
+				//End time
+			} catch (ClientNotFoundException e) {
+				System.err.print(e);
+				e.printStackTrace();
+			}
+			
+		} catch (IOException e) {
+			System.err.print(e);
+			e.printStackTrace();
+		}
+	}
 	
 	public void changeOrderStatus() {
 		int index=0;
@@ -665,9 +686,9 @@ public class Menu {
 
 			e.printStackTrace();
 		}
-		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
+		
 		mainMenu();
-		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
+		
 		//Saving
 		try {
 			adminSystem.saveRestaurants();

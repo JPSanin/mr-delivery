@@ -12,4 +12,9 @@ public class ClientNotFoundException extends Exception{
 		super("Cannot Find Client with document number: "+docNum);
 		
 	}
+	
+	public ClientNotFoundException( String name) {
+		super("Cannot Find Client with name: "+name);
+		
+	}
 }

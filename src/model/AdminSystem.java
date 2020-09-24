@@ -149,6 +149,82 @@ public class AdminSystem {
 		}	
 	}
 	
+	public int searchClientName(String name) throws ClientNotFoundException {
+		int r=0;
+		ArrayList<Client> clientsSearch= orderClientByNames();
+		String[] names= name.split(" ",2);
+		String realname = names[1]+ " "+ names[0];
+		boolean found=false;
+		int start=0;
+		int end= clients.size()-1;
+		
+		while(start<=end && !found) {
+			
+			int mid= (start+end)/2;
+			if(clientsSearch.get(mid).getName().equals(realname)) {
+				found=true;
+				r=mid;
+				
+			}else if(clientsSearch.get(mid).getName().compareTo(realname)>0) {
+				end= mid-1;
+			}else {
+				start=mid+1;	
+			}
+			
+		}
+		if (found==true) {
+			return r;
+		}else {
+			throw new ClientNotFoundException(name);
+		}
+		
+	}
+	
+	
+	public ArrayList<Client> orderClientByNames() {
+		ArrayList<Client> clientByNames= clients;
+		
+		int count= clientByNames.size();
+		
+		 for (int i = 0; i < count; i++) 
+	        {
+	            for (int j = i + 1; j < count; j++) { 
+	            	
+	                if (clientByNames.get(i).getName().compareTo(clientByNames.get(j).getName())>0) 
+	                {
+	                	System.out.println("yes");
+	                    Client temp = clientByNames.get(i);
+	                    clientByNames.set(i,clientByNames.get(j));
+	                    clientByNames.set(j,temp);
+	                }
+	            }
+	        }
+		
+		 
+		return clientByNames;
+		
+		
+	}
+	public static boolean binarySearcher(int searchValue, int[] array) {
+		boolean found = false;
+		int start=0;
+		int end= array.length-1;
+		
+		while(start<=end && !found) {
+			
+			int mid= (start+end)/2;
+			if(array[mid]==searchValue) {
+				found=true;
+			}else if(array[mid]>searchValue) {
+				end= mid-1;
+			}else {
+				start=mid+1;	
+			}
+			
+		}
+		return found;
+		
+	}
 
 	public String printOrderedClientsByPhone() {
 		String info="";
