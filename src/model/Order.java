@@ -70,7 +70,15 @@ public class Order implements Serializable {
 		return r;
 	}
 	
-	public void modifyStatus() {}
+	public void modifyStatus() {
+		if (status==Status.REQUESTED) {
+			status=Status.IN_PROCESS;
+		}else if(status==Status.IN_PROCESS) {
+			status=Status.SHIPPED;
+		}else if(status==Status.SHIPPED) {
+			status=Status.DELIVERED;
+		}
+	}
 	
 	public int getCode() {
 		return code;

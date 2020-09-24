@@ -11,6 +11,7 @@ import model.AdminSystem;
 import model.Client;
 import model.IdType;
 import model.Product;
+import model.Status;
 
 
 public class Menu {
@@ -37,8 +38,8 @@ public class Menu {
 			System.out.println("4) Register Restaurant");
 			System.out.println("5) Add Products");
 			System.out.println("6) Update Information");
-			System.out.println("7) Display Restaurants");
-			System.out.println("8) Display Clients");
+			System.out.println("7) Display Restaurants Ordered by Name");
+			System.out.println("8) Display Clients Ordered by Phone");
 			System.out.println("9) Find a Client");
 			System.out.println("10) Export Data");
 			System.out.println("11) Import Data");
@@ -51,7 +52,7 @@ public class Menu {
 					orderCreater();
 				break;
 				case 2:
-					System.out.println("Not implemented yet");
+					changeOrderStatus();
 					break;
 				case 3:
 					clientAdder();
@@ -63,7 +64,7 @@ public class Menu {
 					productAdder();
 					break;
 				case 6:
-					System.out.println("Not implemented yet");
+					updateInfo();
 					break;
 				case 7:
 					adminSystem.orderRestaurants();
@@ -85,7 +86,7 @@ public class Menu {
 				
 				
 			} catch (NumberFormatException | IOException e) {
-				// TODO Auto-generated catch block
+				System.err.print(e);
 				e.printStackTrace();
 			}
 			
@@ -93,6 +94,44 @@ public class Menu {
 		
 		System.out.println("Thank you for using Mr Delivery, See you soon :)");
 	}
+	
+	
+	public void changeOrderStatus() {
+		int index=0;
+		int index2=0;
+		System.out.println("Changing order Status...");
+		System.out.println("Please enter client document number");
+		try {
+			int cID= Integer.parseInt(br.readLine());
+			try {
+				index=adminSystem.searchClient(cID);
+				System.out.println("Please enter order code");
+				int code= Integer.parseInt(br.readLine());
+				
+				try {
+					index2=adminSystem.searchOrder(code,index);
+					if(adminSystem.getClients().get(index).getOrder().get(index2).getStatus()==Status.DELIVERED) {
+						System.out.println("The order has already been delivered cannot change status");
+					}else {
+						adminSystem.getClients().get(index).getOrder().get(index2).modifyStatus();
+						System.out.println("Order status changed successfully to: "
+						+adminSystem.getClients().get(index).getOrder().get(index2).getStatus());
+					}
+					
+				} catch (OrderNotFoundException e) {
+					System.err.print(e);
+					e.printStackTrace();
+				}
+			} catch (ClientNotFoundException e) {
+				System.err.print(e);
+				e.printStackTrace();
+			}
+		} catch (NumberFormatException | IOException e) {
+			System.err.print(e);
+			e.printStackTrace();
+		}
+	}
+	
 	public void orderCreater() {
 		
 		int option=0;
@@ -140,7 +179,7 @@ public class Menu {
 			}
 
 		} catch (IOException | NumberFormatException e) {
-			// TODO Auto-generated catch block
+			System.err.print(e);
 			e.printStackTrace();
 		}
 
@@ -503,6 +542,45 @@ public class Menu {
 		}
 	}
 	
+	public void updateInfo() {
+		int option=0;
+		
+		do {
+			System.out.println("Please select the element you would like to update");
+			System.out.println("1) Update Restaurant");
+			System.out.println("2) Update Product");
+			System.out.println("3) Update Client");
+			System.out.println("4) Update Order");
+			System.out.println("5) Exit");
+			
+			try {
+				option=Integer.parseInt(br.readLine());
+				switch (option) {
+				
+				case 1:
+					restaurantUpdater();
+				break;
+				case 2:
+					productUpdater();
+					break;
+				case 3:
+					clientUpdater();
+					break;
+				case 4:
+					orderUpdater();
+					break;
+			
+				}
+				
+				
+			} catch (NumberFormatException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}while(option!=5);
+		
+	}
+	
 	public void clientAdder() {
 
 		String[] clientInfo;
@@ -580,87 +658,22 @@ public class Menu {
 		//Loading
 		try {
 			adminSystem.loadRestaurants();
-			//adminSystem.loadProducts();
+		
 			adminSystem.loadClients();
-			//adminSystem.loadOrders();
+		
 		} catch (ClassNotFoundException | IOException e) {
 
 			e.printStackTrace();
 		}
-		
-		//******Test no serial orders/products
-		//restaurantAdder();
-		//System.out.println(adminSystem.showRestaurants());
-		//restaurantAdder();
-		//System.out.println(adminSystem.showRestaurants());
-		//productAdder();
-		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(0)));
-		//System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(1)));
-		//clientAdder();
-		//clientAdder();
-		productAdder();
-		System.out.println(adminSystem.showClients());
-		orderUpdater();
 		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
-		//orderCreator();
-		//System.out.println(adminSystem.showOrders(adminSystem.getClients().get(1)));
-		//clientAdder();
-		
-		//System.out.println(adminSystem.showClients());
-		//System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
-		//System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(3)));
-		//System.out.println(adminSystem.showOrders(adminSystem.getClients().get(1)));
-		//orderCreator();
-		//System.out.println(adminSystem.showOrders(adminSystem.getClients().get(1)));
-		/*productAdder();
-		System.out.println(adminSystem.getRestaurants().get(2).getName());
-		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
-		productUpdater();
-		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(2)));
-		/*adminSystem.addRestaurant("Authentic Wings", 1098771, "Paco Perea");
-		adminSystem.addRestaurant("Zebra Flavor", 1098771, "Paco Perea");
-		adminSystem.addRestaurant("Sushi Green", 4641651, "Dongjoon Lee");
-		adminSystem.addRestaurant("Sushi Market", 87494, "Bee Song Yu");
-		adminSystem.addRestaurant("PF Changs", 8854201, "Albert Morikawa");
-		System.out.println("Before");
-		System.out.println(adminSystem.showRestaurants());
-		adminSystem.orderRestaurants();
-		System.out.println("After");
-		System.out.println(adminSystem.showRestaurants());*/
-
-		
-		
-		/*
-		System.out.println(adminSystem.showRestaurants());
-		restaurantUpdater();
-		System.out.println(adminSystem.showRestaurants());*/
-		/*adminSystem.addClient(IdType.PASSPORT, 4646511,"Collin Sherman", 2128885471L,"Elms Street 342");
-		adminSystem.addClient(IdType.ID, 9848486,"Dustin Jhonson",7874541232L ,"Carmelo Dr 876");
-		adminSystem.addClient(IdType.LICENSE, 42487212,"Bryson DeChambeau",3187287349L ,"Natty Ave 784");
-		adminSystem.addClient(IdType.LICENSE, 42487212,"Carson DeChambeau",3187287349L ,"Natty Ave 784");
-		adminSystem.addClient(IdType.LICENSE, 42487212,"Sebastian Muñoz", 4795683241L,"Colo Street 151");
-		System.out.println("ordered by name");
-		System.out.println(adminSystem.showClients());*/
-
-/*
-		System.out.println(adminSystem.showClients());
-		clientUpdater();
-		System.out.println(adminSystem.showClients());
-	
-		/*
-		clientAdder();
-		System.out.println(adminSystem.showClients());
-		restaurantAdder();
-		System.out.println(adminSystem.showRestaurants());
-		productAdder();
-		System.out.println(adminSystem.showProducts(adminSystem.getRestaurants().get(0)));*/
-
+		mainMenu();
+		System.out.println(adminSystem.showOrders(adminSystem.getClients().get(0)));
 		//Saving
 		try {
 			adminSystem.saveRestaurants();
-			//adminSystem.saveProducts();
+			
 			adminSystem.saveClients();
-			//adminSystem.saveOrders();
+			
 		} catch (ClassNotFoundException | IOException e) {
 
 			e.printStackTrace();
