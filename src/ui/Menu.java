@@ -23,8 +23,77 @@ public class Menu {
 		br= new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	 
-	public void orderCreator() {
+	public void mainMenu() {
+		int option=0;
+		int exit=12;
+		System.out.println("================================================");
+		System.out.println("WELCOME TO MR.DELIVERY RESTAURANT MANAGEMENT APP");
+		System.out.println("================================================");
+		do {
+			System.out.println("Please select the option that represents what you would like to do");
+			System.out.println("1) Create Order");
+			System.out.println("2) Change Order Status");
+			System.out.println("3) Register Client");
+			System.out.println("4) Register Restaurant");
+			System.out.println("5) Add Products");
+			System.out.println("6) Update Information");
+			System.out.println("7) Display Restaurants");
+			System.out.println("8) Display Clients");
+			System.out.println("9) Find a Client");
+			System.out.println("10) Export Data");
+			System.out.println("11) Import Data");
+			System.out.println("12) Exit Program");
+			try {
+				option=Integer.parseInt(br.readLine());
+				switch (option) {
+				
+				case 1:
+					orderCreater();
+				break;
+				case 2:
+					System.out.println("Not implemented yet");
+					break;
+				case 3:
+					clientAdder();
+					break;
+				case 4:
+					restaurantAdder();
+					break;
+				case 5:
+					productAdder();
+					break;
+				case 6:
+					System.out.println("Not implemented yet");
+					break;
+				case 7:
+					adminSystem.orderRestaurants();
+					System.out.println(adminSystem.showRestaurants());
+					break;
+				case 8:
+					System.out.println(adminSystem.printOrderedClientsByPhone());
+					break;
+				case 9:
+					System.out.println("Not implemented yet");
+					break;
+				case 10:
+					System.out.println("Not implemented yet");
+					break;
+				case 11:
+					System.out.println("Not implemented yet");
+					break;
+				}
+				
+				
+			} catch (NumberFormatException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}while(option !=exit);
+		
+		System.out.println("Thank you for using Mr Delivery, See you soon :)");
+	}
+	public void orderCreater() {
 		
 		int option=0;
 		
