@@ -334,6 +334,26 @@ public class AdminSystem {
 		brf.close();
 	}
 
+	
+	public void importClients(String path) throws IOException {
+		BufferedReader brf= new BufferedReader(new FileReader(path));
+		String line=brf.readLine();
+		line=brf.readLine();
+		while(line != null) {
+			String[] info= line.split(",");
+			String idTypeEnumValue= info[0].trim().toUpperCase();
+			IdType idType=IdType.valueOf(idTypeEnumValue);
+			int id=Integer.parseInt(info[1].trim());
+			String name= info[2].trim();
+			Long phoneNumber=Long.parseLong(info[3].trim());
+			String address= info[4].trim();
+			Client c= new Client(idType, id, name, phoneNumber, address);
+			clients.add(c);
+			line=brf.readLine();
+		}
+		
+		brf.close();
+	}
 	public void exportOrders() {}
 
 	

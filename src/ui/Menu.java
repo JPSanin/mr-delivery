@@ -718,7 +718,10 @@ public class Menu {
 					
 					break;
 				case 3:
-					System.out.println("not implemented");
+					System.out.println("Please enter the file path");
+					String path3= br.readLine();
+					adminSystem.importClients(path3);
+					System.out.println("Data imported successfully");
 					break;
 				case 4:
 					System.out.println("not implemented");
