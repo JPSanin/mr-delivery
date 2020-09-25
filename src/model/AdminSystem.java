@@ -354,6 +354,43 @@ public class AdminSystem {
 		
 		brf.close();
 	}
+	
+	public int[] importOrders(String path) throws IOException {
+		BufferedReader brf= new BufferedReader(new FileReader(path));
+		String line=brf.readLine();
+		line=brf.readLine();
+		int[] cantAdd=new int[2];
+		cantAdd[0]=0;
+		cantAdd[1]=0;
+		while(line != null) {
+			String[] info= line.split(",");
+			int code=Integer.parseInt(info[0].trim());
+			String date= info[1].trim();
+			int clientId=Integer.parseInt(info[2].trim());
+			int resTaxId=Integer.parseInt(info[3].trim());
+			String statusvalue=info[4].trim().toUpperCase();
+			Status s=Status.valueOf(statusvalue);
+			try {
+				int index1=searchClient(clientId);
+				try {
+					searchRestaurant(resTaxId);
+					clients.get(index1).addOrder(code,clientId, resTaxId,date,s);
+				} catch (RestaurantNotFoundException e) {
+					cantAdd[1]++;
+
+				}
+				
+			} catch (ClientNotFoundException e) {
+				cantAdd[0]++;
+				
+			}
+			line=brf.readLine();
+		}
+		brf.close();
+		return cantAdd;
+		
+	}
+	
 	public void exportOrders() {}
 
 	

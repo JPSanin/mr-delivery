@@ -624,6 +624,7 @@ public class Menu {
 			Long phoneNumber=Long.parseLong(clientInfo[3].trim());
 			String address= clientInfo[4].trim();
 			adminSystem.addClient(idType, id,name,phoneNumber,address);
+			System.out.println("Client added succesfully");
 		} catch (IOException | NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -641,6 +642,7 @@ public class Menu {
 			int taxId=Integer.parseInt(resInfo[1].trim());
 			String managerName= resInfo[2].trim();
 			adminSystem.addRestaurant(name, taxId, managerName);
+			System.out.println("Restaurant added successfully");
 		} catch (IOException | NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -672,6 +674,7 @@ public class Menu {
 					String description= productInfo[2].trim();
 					double price=Double.parseDouble(productInfo[3].trim());		
 					adminSystem.getRestaurants().get(option-1).addProduct(code, name, description, price); 
+					System.out.println("Restaurant added successfully");
 				}
 
 			} catch (IOException | NumberFormatException e) {
@@ -724,7 +727,12 @@ public class Menu {
 					System.out.println("Data imported successfully");
 					break;
 				case 4:
-					System.out.println("not implemented");
+					System.out.println("Please enter the file path");
+					String path4= br.readLine();
+					int[] cantAdd=adminSystem.importOrders(path4);
+					System.out.println("Data imported successfully");
+					System.out.println(cantAdd[0]+ " Orders weren't added because the client was not found");
+					System.out.println(cantAdd[1]+ " Orders weren't added because the restaurant was not found");
 					break;
 				}
 				

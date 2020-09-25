@@ -32,6 +32,16 @@ public class Order implements Serializable {
 		productQuantities= new ArrayList<Integer>();
 	}
 	
+	public Order(int code,int clientID, int resTaxId, String date, Status s) {
+		dateString = date;
+		this.code=code;
+		this.clientID = clientID;
+		this.resTaxId = resTaxId;
+		status=s;
+		products=new ArrayList<Product>();
+		productQuantities= new ArrayList<Integer>();
+	}
+	
 	public void generateCode(ArrayList<Client> clients) {
 		code= (int) (Math.random()*10000000+1000);
 	}
