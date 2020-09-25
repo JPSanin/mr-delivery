@@ -1,9 +1,11 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,6 +16,7 @@ import exceptions.ClientNotFoundException;
 import exceptions.OrderNotFoundException;
 import exceptions.ProductNotFoundException;
 import exceptions.RestaurantNotFoundException;
+
 
 
 public class AdminSystem {
@@ -295,11 +298,45 @@ public class AdminSystem {
 		return info;
 	}
 	
+	public void importRestaurants(String path) throws IOException {
+		BufferedReader brf= new BufferedReader(new FileReader(path));
+		String line=brf.readLine();
+		line=brf.readLine();
+		while(line != null) {
+			String[] info= line.split(",");
+			String name= info[0].trim();
+			int taxId= Integer.parseInt(info[1].trim());
+			String managerName= info[2].trim();
+			Restaurant r= new Restaurant (name, taxId, managerName);
+			restaurants.add(r);
+			line=brf.readLine();
+		}
+		
+		brf.close();
+	}
 	
+	public void importProducts(String path, int taxID) throws IOException, RestaurantNotFoundException {
+		BufferedReader brf= new BufferedReader(new FileReader(path));
+		String line=brf.readLine();
+		line=brf.readLine();
+		while(line != null) {
+			String[] info= line.split(",");
+			int code= Integer.parseInt(info[0].trim());
+			String name= info[1].trim();
+			String desc= info[2].trim();
+			String price= info[3].trim();
+			Double price2= Double.parseDouble(price);
+			int index=searchRestaurant(taxID);
+			restaurants.get(index).addProduct(code, name, desc, price2);
+			line=brf.readLine();
+		}
+		
+		brf.close();
+	}
 
 	public void exportOrders() {}
 
-	public void importData() {}
+	
 
 	
 	//Gets and Sets

@@ -75,14 +75,12 @@ public class Menu {
 					break;
 				case 9:
 					efficientClientFinder();
-					
-					
 					break;
 				case 10:
 					System.out.println("Not implemented yet");
 					break;
 				case 11:
-					System.out.println("Not implemented yet");
+					importMenu();
 					break;
 				}
 				
@@ -197,7 +195,8 @@ public class Menu {
 					adminSystem.getClients().get(index1).getOrder().get(orderNumber).generateCode(adminSystem.getClients());
 					addProductToOrder(index1, index2, orderNumber);
 					
-					
+					System.out.println("Order Created Successfully:");
+					System.out.println(adminSystem.getClients().get(index1).getOrder().get(orderNumber));
 				} catch (ClientNotFoundException e) {
 					System.err.print(e);
 					e.printStackTrace();
@@ -683,6 +682,59 @@ public class Menu {
 		}while(option!=exit);
 	}
 
+	public void importMenu() {
+		
+		int option=0;
+		int exit=5;
+		do {
+			System.out.println("Please select what you would like to import");
+			System.out.println("1) Restaurants");
+			System.out.println("2) Products");
+			System.out.println("3) Clients");
+			System.out.println("4) Orders");
+			System.out.println("5) Exit");
+			try {
+				option=Integer.parseInt(br.readLine());
+				
+				switch(option) {	
+				case 1:
+					System.out.println("Please enter the file path");
+					String path= br.readLine();
+					adminSystem.importRestaurants(path);
+					System.out.println("Data imported successfully");
+					break;
+				case 2:
+					System.out.println("Please enter the file path");
+					String path2= br.readLine();
+					System.out.println("Please enter the restaurant tax ID to import products");
+					int taxID= Integer.parseInt(br.readLine());
+					try {
+						adminSystem.importProducts(path2,taxID);
+						System.out.println("Data imported successfully");
+					} catch (RestaurantNotFoundException e) {
+						System.err.print(e);
+						e.printStackTrace();
+					}
+					
+					break;
+				case 3:
+					System.out.println("not implemented");
+					break;
+				case 4:
+					System.out.println("not implemented");
+					break;
+				}
+				
+				
+			} catch (NumberFormatException | IOException e) {
+				System.err.print(e);
+				e.printStackTrace();
+			}
+			
+		}while(option !=exit);
+	}
+	
+	
 	public void start() {
 		//Loading
 		try {
