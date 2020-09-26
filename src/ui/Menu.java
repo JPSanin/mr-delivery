@@ -77,7 +77,10 @@ public class Menu {
 					efficientClientFinder();
 					break;
 				case 10:
-					System.out.println("Not implemented yet");
+					System.out.println("before");
+					adminSystem.addAllOrders();
+					System.out.println("After");
+					adminSystem.orderOrdersForExport();
 					break;
 				case 11:
 					importMenu();

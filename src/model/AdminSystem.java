@@ -6,11 +6,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+//import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+//import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 import exceptions.ClientNotFoundException;
 import exceptions.OrderNotFoundException;
@@ -22,12 +28,14 @@ import exceptions.RestaurantNotFoundException;
 public class AdminSystem {
 	public final static String FILE_RES_SER= "data/infoRestaurant.dat";
 	public final static String FILE_CLI_SER= "data/infoClient.dat";
+	public final static String FILE_EXPORT= "data/Orders.csv";
 	private ArrayList<Restaurant> restaurants;
 	private ArrayList<Client> clients;
-
+	private ArrayList<Order> ordersExport;
 	public AdminSystem() {
 		restaurants= new ArrayList<Restaurant>();
 		clients=new ArrayList<Client>();
+		ordersExport=new ArrayList<Order>();
 	}
 
 	//****************************************************************************************
@@ -98,7 +106,7 @@ public class AdminSystem {
 		}
 	}
 
-	
+
 	//****************************************************************************************
 	//Product Methods
 
@@ -151,7 +159,7 @@ public class AdminSystem {
 			throw new ClientNotFoundException(search);
 		}	
 	}
-	
+
 	public int searchClientName(String name) throws ClientNotFoundException {
 		int r=0;
 		ArrayList<Client> clientsSearch= orderClientByNames();
@@ -160,55 +168,55 @@ public class AdminSystem {
 		boolean found=false;
 		int start=0;
 		int end= clients.size()-1;
-		
+
 		while(start<=end && !found) {
-			
+
 			int mid= (start+end)/2;
 			if(clientsSearch.get(mid).getName().equals(realname)) {
 				found=true;
 				r=mid;
-				
+
 			}else if(clientsSearch.get(mid).getName().compareTo(realname)>0) {
 				end= mid-1;
 			}else {
 				start=mid+1;	
 			}
-			
+
 		}
 		if (found==true) {
 			return r;
 		}else {
 			throw new ClientNotFoundException(name);
 		}
-		
+
 	}
-	
-	
+
+
 	public ArrayList<Client> orderClientByNames() {
 		ArrayList<Client> clientByNames= clients;
-		
+
 		int count= clientByNames.size();
-		
-		 for (int i = 0; i < count; i++) 
-	        {
-	            for (int j = i + 1; j < count; j++) { 
-	            	
-	                if (clientByNames.get(i).getName().compareTo(clientByNames.get(j).getName())>0) 
-	                {
-	                	System.out.println("yes");
-	                    Client temp = clientByNames.get(i);
-	                    clientByNames.set(i,clientByNames.get(j));
-	                    clientByNames.set(j,temp);
-	                }
-	            }
-	        }
-		
-		 
+
+		for (int i = 0; i < count; i++) 
+		{
+			for (int j = i + 1; j < count; j++) { 
+
+				if (clientByNames.get(i).getName().compareTo(clientByNames.get(j).getName())>0) 
+				{
+					System.out.println("yes");
+					Client temp = clientByNames.get(i);
+					clientByNames.set(i,clientByNames.get(j));
+					clientByNames.set(j,temp);
+				}
+			}
+		}
+
+
 		return clientByNames;
-		
-		
+
+
 	}
-	
+
 
 	public String printOrderedClientsByPhone() {
 		String info="";
@@ -220,7 +228,7 @@ public class AdminSystem {
 		}
 		return info;
 	}
-	
+
 	public void addClient(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
 		Client c= new Client (idType,idNumber,name,phoneNumber,address);
 		if(clients.isEmpty()) {
@@ -285,7 +293,7 @@ public class AdminSystem {
 			throw new OrderNotFoundException(search);
 		}	
 	}
-	
+
 	public String showOrders(Client c) {
 		String info="";
 		for(int i=0; i<c.getOrder().size(); i++) {
@@ -297,7 +305,73 @@ public class AdminSystem {
 		}
 		return info;
 	}
+
 	
+	public String showAllOrders() {
+		String info="";
+		for(int i=0; i<ordersExport.size(); i++) {
+			if(i==ordersExport.size()-1) {
+				info+=ordersExport.get(i);	
+			}else {
+				info+=ordersExport.get(i)+"\n";	
+			}
+		}
+		return info;
+	}
+
+	public void orderOrdersForExport() {
+		//Order by restaurantTaxId 1
+		//Order by client ID
+		//Date
+		Comparator<Order> c;
+
+		c = new Comparator<Order>() {			
+			public int compare(Order n1, Order n2) {
+				int comp;
+				comp = n1.getResTaxId()-n2.getResTaxId();
+				if(comp==0) {
+					comp = n1.getClientID()-n2.getClientID();
+				}if(comp==0){
+					String dateString1 = n1.getDateString();
+					String dateString2 =  n2.getDateString();
+
+					SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+					try {
+						Date date1 = format.parse(dateString1);
+						Date date2 = format.parse(dateString2);
+						comp= date1.compareTo(date2);
+					} catch (ParseException e) {
+						
+					
+					}
+					
+
+
+				}
+				return comp;
+			}
+		};
+		
+		Collections.sort(ordersExport,c);	
+		System.out.println(showAllOrders());
+	}
+
+
+	public void addAllOrders() {
+		int size=clients.size();
+
+		for(int i=0; i<size; i++) {
+			for(int j=0; j<clients.get(i).getOrder().size();j++) {
+				ordersExport.add(clients.get(i).getOrder().get(j));
+			}
+		}
+		System.out.println(showAllOrders());
+
+	}
+
+
+	//Import Export Methods
 	public void importRestaurants(String path) throws IOException {
 		BufferedReader brf= new BufferedReader(new FileReader(path));
 		String line=brf.readLine();
@@ -311,10 +385,10 @@ public class AdminSystem {
 			restaurants.add(r);
 			line=brf.readLine();
 		}
-		
+
 		brf.close();
 	}
-	
+
 	public void importProducts(String path, int taxID) throws IOException, RestaurantNotFoundException {
 		BufferedReader brf= new BufferedReader(new FileReader(path));
 		String line=brf.readLine();
@@ -330,11 +404,11 @@ public class AdminSystem {
 			restaurants.get(index).addProduct(code, name, desc, price2);
 			line=brf.readLine();
 		}
-		
+
 		brf.close();
 	}
 
-	
+
 	public void importClients(String path) throws IOException {
 		BufferedReader brf= new BufferedReader(new FileReader(path));
 		String line=brf.readLine();
@@ -351,10 +425,10 @@ public class AdminSystem {
 			clients.add(c);
 			line=brf.readLine();
 		}
-		
+
 		brf.close();
 	}
-	
+
 	public int[] importOrders(String path) throws IOException {
 		BufferedReader brf= new BufferedReader(new FileReader(path));
 		String line=brf.readLine();
@@ -379,23 +453,32 @@ public class AdminSystem {
 					cantAdd[1]++;
 
 				}
-				
+
 			} catch (ClientNotFoundException e) {
 				cantAdd[0]++;
-				
+
 			}
 			line=brf.readLine();
 		}
 		brf.close();
 		return cantAdd;
-		
+
 	}
-	
-	public void exportOrders() {}
 
-	
+	/*
+	public void exportOrders(String separator) throws IOException, FileNotFoundException {
+		File f= new File (FILE_EXPORT);
+		FileWriter fw= new FileWriter(f);
+		PrintWriter pw= new PrintWriter(f);
+		String info= "";
+		//Recorrer nuevo arreglo orders To print organizarlo a criterio para imprimirlo
 
-	
+
+	}*/
+
+
+
+
 	//Gets and Sets
 	public ArrayList<Restaurant> getRestaurants() {
 		return restaurants;
