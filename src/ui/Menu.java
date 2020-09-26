@@ -77,10 +77,7 @@ public class Menu {
 					efficientClientFinder();
 					break;
 				case 10:
-					System.out.println("before");
-					adminSystem.addAllOrders();
-					System.out.println("After");
-					adminSystem.orderOrdersForExport();
+					export();
 					break;
 				case 11:
 					importMenu();
@@ -748,6 +745,22 @@ public class Menu {
 		}while(option !=exit);
 	}
 	
+	public void export() {
+		System.out.println("Please enter the separator you would like to use");
+		String sep;
+		try {
+			sep = br.readLine();
+			char separator=sep.charAt(0);
+			adminSystem.addAllOrders();
+			adminSystem.orderOrdersForExport();
+			adminSystem.exportOrders(separator);
+			System.out.println("Orders exported succesfully");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	public void start() {
 		//Loading

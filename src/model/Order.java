@@ -80,6 +80,12 @@ public class Order implements Serializable {
 		return r;
 	}
 	
+	public String exportToString(char separator) {
+		String r = "";
+		r+=code + ""+ separator +""+dateString+ separator+clientID +separator+ resTaxId+ separator+status;
+		return r;
+	}
+	
 	public void modifyStatus() {
 		if (status==Status.REQUESTED) {
 			status=Status.IN_PROCESS;

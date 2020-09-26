@@ -6,13 +6,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-//import java.io.FileWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-//import java.io.PrintWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -307,13 +307,14 @@ public class AdminSystem {
 	}
 
 	
-	public String showAllOrders() {
+	public String showAllOrders(char separator) {
 		String info="";
+		
 		for(int i=0; i<ordersExport.size(); i++) {
 			if(i==ordersExport.size()-1) {
-				info+=ordersExport.get(i);	
+				info+=ordersExport.get(i).exportToString(separator);	
 			}else {
-				info+=ordersExport.get(i)+"\n";	
+				info+=ordersExport.get(i).exportToString(separator)+"\n";	
 			}
 		}
 		return info;
@@ -354,19 +355,19 @@ public class AdminSystem {
 		};
 		
 		Collections.sort(ordersExport,c);	
-		System.out.println(showAllOrders());
+		
 	}
 
 
 	public void addAllOrders() {
 		int size=clients.size();
-
+		ordersExport.clear();
 		for(int i=0; i<size; i++) {
 			for(int j=0; j<clients.get(i).getOrder().size();j++) {
 				ordersExport.add(clients.get(i).getOrder().get(j));
 			}
 		}
-		System.out.println(showAllOrders());
+		
 
 	}
 
@@ -465,16 +466,19 @@ public class AdminSystem {
 
 	}
 
-	/*
-	public void exportOrders(String separator) throws IOException, FileNotFoundException {
+	
+	public void exportOrders(char separator) throws IOException, FileNotFoundException {
 		File f= new File (FILE_EXPORT);
 		FileWriter fw= new FileWriter(f);
 		PrintWriter pw= new PrintWriter(f);
 		String info= "";
-		//Recorrer nuevo arreglo orders To print organizarlo a criterio para imprimirlo
+		info+="Order code" + ""+ separator +""+"Date"+ separator+"Client ID" +separator+ "Restaurant Tax ID"+ separator+"Status"+"\n";
+		info+=showAllOrders(separator);
+		pw.print(info);
+		fw.close();
+		pw.close();
 
-
-	}*/
+	}
 
 
 
