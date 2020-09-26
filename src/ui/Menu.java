@@ -19,11 +19,21 @@ public class Menu {
 	private AdminSystem adminSystem;
 	private BufferedReader br;
 
+	 /** Constructor method for a Menu <br>
+		<b> pre: </b> <br>
+		<b> post: </b> Creates a menu and initializes its attributes<br>
+		*/
 	public Menu() {
 		adminSystem= new AdminSystem();
 		br= new BufferedReader(new InputStreamReader(System.in));
 	}
 
+	
+	/** Method for showing main menu<br>
+	
+	<b> pre: </b> <br>
+	<b> post: </b> Prints options and read selection<br>	
+	*/
 	public void mainMenu() {
 		int option=0;
 		int exit=12;
@@ -87,7 +97,8 @@ public class Menu {
 				
 			} catch (NumberFormatException | IOException e) {
 				System.err.print(e);
-				e.printStackTrace();
+				System.out.println("Please enter a valid option");
+				//e.printStackTrace();
 			}
 			
 		}while(option !=exit);
@@ -95,7 +106,11 @@ public class Menu {
 		System.out.println("Thank you for using Mr Delivery, See you soon :)");
 	}
 	
+	/** Method for finding client efficiently<br>
 	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> Finds client and prints time it took<br>	
+	*/
 	public void efficientClientFinder() {
 		System.out.println("Please enter the client Name (FirstName LastName)");
 		try {
@@ -114,15 +129,22 @@ public class Menu {
 				System.out.println("Time it took in seconds: "+ elapsedTime);
 			} catch (ClientNotFoundException e) {
 				System.err.print(e);
-				e.printStackTrace();
+				System.out.println("Client not found please try again and make sure it has already been registered");
+				//e.printStackTrace();
 			}
 			
 		} catch (IOException e) {
 			System.err.print(e);
-			e.printStackTrace();
+			System.out.println("Please enter data correctly");
+			//e.printStackTrace();
 		}
 	}
 	
+	/** Method for changing order status<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> Finds order and changes its status<br>	
+	*/
 	public void changeOrderStatus() {
 		int index=0;
 		int index2=0;
@@ -147,18 +169,27 @@ public class Menu {
 					
 				} catch (OrderNotFoundException e) {
 					System.err.print(e);
-					e.printStackTrace();
+					System.out.println("Order was not found cannot change status");
+					//e.printStackTrace();
 				}
 			} catch (ClientNotFoundException e) {
 				System.err.print(e);
-				e.printStackTrace();
+				System.out.println("Client was not found cannot change status");
+				//e.printStackTrace();
 			}
 		} catch (NumberFormatException | IOException e) {
 			System.err.print(e);
-			e.printStackTrace();
+			System.out.println("Please enter information correctly");
+			//e.printStackTrace();
 		}
 	}
 	
+	
+	/** Method for creating an order<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> Creates new order<br>	
+	*/
 	public void orderCreater() {
 		
 		int option=0;
@@ -208,11 +239,20 @@ public class Menu {
 
 		} catch (IOException | NumberFormatException e) {
 			System.err.print(e);
-			e.printStackTrace();
+			System.out.println("Please enter information correctly");
+			//e.printStackTrace();
 		}
 
 	}
 	
+	/** Method adding product to an order<br>
+	
+	<b> pre: </b> Order has been selected<br>
+	<b> post: </b> Adds product to order<br>
+	@param index1, position in client list of the client that wants to add a product
+	@param index2, position in order list of the order that the product is being added to
+	@param orderNumber, number representing the order to be added to
+	*/
 	public void addProductToOrder(int index1, int index2, int orderNumber) throws NumberFormatException, IOException {
 		
 		int selection=0;
@@ -255,6 +295,12 @@ public class Menu {
 		
 	}
 	
+	
+/** Method for updating an order<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> updates order<br>	
+	*/
 	public void orderUpdater() {
 		int code=0;
 		int index1 = 0;
@@ -340,19 +386,26 @@ public class Menu {
 					
 				} catch (OrderNotFoundException e) {
 					System.err.print(e);
-					e.printStackTrace();
+					System.out.println("Order was not found, make sure it has already been created");
+					//e.printStackTrace();
 				}
 			} catch (ClientNotFoundException cnfe) {
-				System.err.print(cnfe);
-				cnfe.printStackTrace();
+				System.err.print(cnfe); 
+				System.out.println("Client was not found, make sure it has already been registered");
+				//cnfe.printStackTrace();
 			}
 			
 		} catch (IOException | NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Please enter information correctly");
+			//e.printStackTrace();
 		}
 	}
 	
+	/** Method for updating a restaurant<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> updates restaurant<br>	
+	*/
 	public void restaurantUpdater() {
 		int taxID=0;
 		int index = 0;
@@ -395,18 +448,26 @@ public class Menu {
 				}while(option!=4);
 				adminSystem.orderRestaurants();
 			} catch (RestaurantNotFoundException rnfe) {
-				// TODO Auto-generated catch block
 				System.err.print(rnfe);
-				rnfe.printStackTrace();
+				System.out.println("Restaurant was not found, make sure it has already been registered");
+				//rnfe.printStackTrace();
 			}
 
 
 		} catch (IOException | NumberFormatException e) {
-			// TODO Auto-generated catch block
+			System.err.print(e);
+			System.out.println("Please enter information correctly");
 			e.printStackTrace();
 		}
 	}
 	
+	
+	
+	/** Method for updating a product<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> updates product<br>	
+	*/
 	public void productUpdater() {
 		int code=0;
 		int index1 = 0;
@@ -470,7 +531,8 @@ public class Menu {
 			} catch (ProductNotFoundException pnfe) {
 				// TODO Auto-generated catch block
 				System.err.print(pnfe);
-				pnfe.printStackTrace();
+				System.out.println("Product was not found please make sure it has been added to restaurant menu");
+				//pnfe.printStackTrace();
 			}
 
 
@@ -478,10 +540,17 @@ public class Menu {
 
 		} catch (IOException | NumberFormatException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.print(e);
+			System.out.println("Please enter information correctly");
+			//e.printStackTrace();
 		}
 	}
 
+	/** Method for updating a client<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> updates client<br>	
+	*/
 	public void clientUpdater() {
 		int docNum=0;
 		int index = 0;
@@ -558,18 +627,24 @@ public class Menu {
 				adminSystem.addClient(c.getIdType(), c.getIdNumber(), c.getName(), c.getPhoneNumber(), c.getAddress());
 				
 			} catch (ClientNotFoundException cnfe) {
-				// TODO Auto-generated catch block
 				System.err.print(cnfe);
-				cnfe.printStackTrace();
+				System.out.println("Client was not found please make sure it has already been registered");
+				//cnfe.printStackTrace();
 			}
 
 
 		} catch (IOException | NumberFormatException e) {
-			// TODO Auto-generated catch block
+			System.err.print(e);
+			System.out.println("Please enter information correctly");
 			e.printStackTrace();
 		}
 	}
 	
+	/** Method for displaying update menu<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> <br>	
+	*/
 	public void updateInfo() {
 		int option=0;
 		
@@ -602,13 +677,19 @@ public class Menu {
 				
 				
 			} catch (NumberFormatException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.print(e);
+				System.out.println("Please enter valid option");
+				//e.printStackTrace();
 			}
 		}while(option!=5);
 		
 	}
 	
+	/** Method for adding a client<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> adds client<br>	
+	*/
 	public void clientAdder() {
 
 		String[] clientInfo;
@@ -626,11 +707,17 @@ public class Menu {
 			adminSystem.addClient(idType, id,name,phoneNumber,address);
 			System.out.println("Client added succesfully");
 		} catch (IOException | NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.print(e);
+			System.out.println("Please enter information correctly");
+			//e.printStackTrace();
 		}
 	}
 	
+	/** Method for adding a restaurant<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> adds restaurant<br>	
+	*/
 	public void restaurantAdder()  {
 		String[] resInfo;
 
@@ -644,11 +731,17 @@ public class Menu {
 			adminSystem.addRestaurant(name, taxId, managerName);
 			System.out.println("Restaurant added successfully");
 		} catch (IOException | NumberFormatException e) {
-			// TODO Auto-generated catch block
+			System.err.print(e);
+			System.out.println("Please enter information correctly");
 			e.printStackTrace();
 		}
 	}
 
+	/** Method for adding a productt<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> adds product<br>	
+	*/
 	public void productAdder()  {
 
 		String[] productInfo;
@@ -678,13 +771,20 @@ public class Menu {
 				}
 
 			} catch (IOException | NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.print(e);
+				System.out.println("Please enter information correctly");
+				//e.printStackTrace();
 			}	
 
 		}while(option!=exit);
 	}
 
+	
+	/** Method for displaying import menu<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b> <br>	
+	*/
 	public void importMenu() {
 		
 		int option=0;
@@ -716,7 +816,8 @@ public class Menu {
 						System.out.println("Data imported successfully");
 					} catch (RestaurantNotFoundException e) {
 						System.err.print(e);
-						e.printStackTrace();
+						System.out.println("Restaurant not found please make sure it is registered");
+						//e.printStackTrace();
 					}
 					
 					break;
@@ -738,13 +839,20 @@ public class Menu {
 				
 				
 			} catch (NumberFormatException | IOException e) {
+				
 				System.err.print(e);
-				e.printStackTrace();
+				System.out.println("Please enter information correctly");
+				//e.printStackTrace();
 			}
 			
 		}while(option !=exit);
 	}
 	
+	/** Method for exporting orders<br>
+	
+	<b> pre: </b> Option is selected<br>
+	<b> post: </b>Orders are exported in csv file <br>	
+	*/
 	public void export() {
 		System.out.println("Please enter the separator you would like to use");
 		String sep;
@@ -756,8 +864,9 @@ public class Menu {
 			adminSystem.exportOrders(separator);
 			System.out.println("Orders exported succesfully");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.print(e);
+			System.out.println("Please enter information correctly");
+			//e.printStackTrace();
 		}
 		
 	}
@@ -770,8 +879,9 @@ public class Menu {
 			adminSystem.loadClients();
 		
 		} catch (ClassNotFoundException | IOException e) {
-
-			e.printStackTrace();
+			System.err.print(e);
+			System.out.println("Could not load information");
+			//e.printStackTrace();
 		}
 		
 		mainMenu();
@@ -783,7 +893,8 @@ public class Menu {
 			adminSystem.saveClients();
 			
 		} catch (ClassNotFoundException | IOException e) {
-
+			System.err.print(e);
+			System.out.println("Could not save information");
 			e.printStackTrace();
 		}
 	}

@@ -4,16 +4,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+
 class ProductTest {
+
 
 	private Product p ;
 
+	/**
+	 * Setup stage 1.
+	 */
 	public void setupStage1() {
 		p= new Product(962, "French Fries", "Classic French Fries", 3.99, 72703);
 		
 	}
 	
 	
+	/**
+	 * Test product.
+	 */
 	@Test
 	public void testProduct() {
 		int code=1547;
@@ -30,6 +38,9 @@ class ProductTest {
 	
 	}
 	
+	/**
+	 * Test to string.
+	 */
 	@Test
 	public void testToString() {
 		setupStage1();

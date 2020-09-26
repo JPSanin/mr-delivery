@@ -4,16 +4,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+
 class RestaurantTest {
 
 	private Restaurant r ;
 
+	/**
+	 * Setup stage 1.
+	 */
 	public void setupStage1() {
 		r= new Restaurant("Burger King", 9852564, "Bobby Pujols");	
 		
 	}
 	
 	
+	/**
+	 * Test restaurant.
+	 */
 	@Test
 	public void testRestaurant() {
 		String name= "McDonalds";
@@ -25,6 +32,9 @@ class RestaurantTest {
 		assertEquals(managerName,res.getManagerName(),"The restaurant's manager name is incorrect");
 	}
 	
+	/**
+	 * Test add product.
+	 */
 	@Test
 	public void testAddProduct() {
 		setupStage1();

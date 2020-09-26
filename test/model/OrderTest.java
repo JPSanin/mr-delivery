@@ -4,16 +4,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+
 class OrderTest {
 
+	
 	private Order o ;
 
+	/**
+	 * Setup stage 1.
+	 */
 	public void setupStage1() {
 		o= new Order(141422, 665544);
 		
 	}
 	
 	
+	/**
+	 * Test order.
+	 */
 	@Test
 	public void testOrder() {
 		setupStage1();
@@ -26,6 +34,9 @@ class OrderTest {
 	
 	}
 	
+	/**
+	 * Test add product.
+	 */
 	@Test
 	public void testAddProduct() {
 		setupStage1();

@@ -2,6 +2,7 @@ package model;
 
 import java.util.Comparator;
 
+
 public class RestaurantNameComparator implements Comparator<Restaurant> {
 
 	@Override

@@ -32,6 +32,12 @@ public class AdminSystem {
 	private ArrayList<Restaurant> restaurants;
 	private ArrayList<Client> clients;
 	private ArrayList<Order> ordersExport;
+	
+	/** Constructor method for Admin System <br>
+	<b> pre: </b> <br>
+	<b> post: </b> Creates an Admin System and initializes its attributes<br>
+
+	*/
 	public AdminSystem() {
 		restaurants= new ArrayList<Restaurant>();
 		clients=new ArrayList<Client>();
@@ -40,6 +46,11 @@ public class AdminSystem {
 
 	//****************************************************************************************
 	//Restaurant Methods
+	/** Method for searching restaurants <br>
+	<b> pre: </b> Must have created restaurant list<br>
+	<b> post: </b> returns position of restaurant in the list <br>
+	@param int taxID, restaurant tax id so it can be found
+	*/
 	public int searchRestaurant(int taxID) throws RestaurantNotFoundException{
 		int search= taxID;
 		boolean found= false;
@@ -63,6 +74,11 @@ public class AdminSystem {
 		Collections.sort(restaurants, rnc);
 	}
 
+	/** Method for showing restaurants as options<br>
+	<b> pre: </b> Must have created restaurant list<br>
+	<b> post: </b> returns string displaying restaurants <br>
+	
+	*/
 	public String showRestaurantsOptions() {
 		String info="";
 		for(int i=0; i<restaurants.size(); i++) {
@@ -74,7 +90,12 @@ public class AdminSystem {
 		}
 		return info;
 	}
-
+	
+	/** Method for showing restaurant information<br>
+	<b> pre: </b> Must have created restaurant list<br>
+	<b> post: </b> returns string with restaurants and their attributes <br>
+	
+	*/
 	public String showRestaurants() {
 		String info="";
 		for(int i=0; i<restaurants.size(); i++) {
@@ -83,18 +104,34 @@ public class AdminSystem {
 		return info;
 	}
 
+	/**  method for adding a Restaurant <br>
+	<b> pre: </b> List already has to be initialized<br>
+	<b> post: </b> Creates a restaurant and adds it to list<br>
+	@param name, a name for the restaurant, must be a String !=null or !=" "
+	@param resTaxID, the restaurant tax ID, whole positive number
+	@param managerName,the name of the restaurant's manager, must be a String !=null or !=" "
+	*/
 	public void addRestaurant(String name, int taxID, String managerName) {
 		Restaurant r= new Restaurant (name, taxID, managerName);
 		restaurants.add(r);
 	}
-
+	
+	
+	/**  method for serializing restaurants <br>
+	<b> pre: </b> List already has to be initialized<br>
+	<b> post: </b> Serializes restaurants<br>
+	*/
 	public void saveRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_RES_SER);
 		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
 		oos.writeObject(restaurants);
 		oos.close();
 	}
-
+	
+	/**  method for deserializing restaurants <br>
+	<b> pre: </b> List already has to be initialized<br>
+	<b> post: </b> deserializes restaurants and loads them<br>
+	*/
 	@SuppressWarnings("unchecked")
 	public void loadRestaurants() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_RES_SER);
@@ -109,7 +146,12 @@ public class AdminSystem {
 
 	//****************************************************************************************
 	//Product Methods
-
+	/** Method for searching products <br>
+	<b> pre: </b> Must have created restaurant list<br>
+	<b> post: </b> returns position of restaurant in the list <br>
+	@param c, product code to search for in restaurant
+	@param resIndex, position of the restaurant to search in
+	*/
 	public int searchProduct(int c, int resIndex) throws ProductNotFoundException {
 		int search = c;
 		boolean found= false;
@@ -127,6 +169,12 @@ public class AdminSystem {
 		}	
 	}
 
+	/** Method for showing products of a restaurant<br>
+	<b> pre: </b> Must have created restaurant list and added products to it<br>
+	<b> post: </b> returns string with products <br>
+	@param r, Restaurant object to display its' products
+	
+	*/
 	public String showProducts(Restaurant r) {
 		String info="";
 		for(int i=0; i<r.getMenuItems().size(); i++) {
@@ -142,6 +190,12 @@ public class AdminSystem {
 
 	//****************************************************************************************
 	//Client methods
+	/** Method for searching clients <br>
+	<b> pre: </b> Must have created client list<br>
+	<b> post: </b> returns position of client in the list <br>
+	@param docNum, client id to search for in clients
+	
+	*/
 	public int searchClient(int docNum) throws ClientNotFoundException {
 		int search= docNum;
 		boolean found= false;
@@ -160,6 +214,13 @@ public class AdminSystem {
 		}	
 	}
 
+	
+	/** Method for searching clients efficiently<br>
+	<b> pre: </b> Must have created client list<br>
+	<b> post: </b> returns position of client in the list <br>
+	@param name, client name to search for in list
+	
+	*/
 	public int searchClientName(String name) throws ClientNotFoundException {
 		int r=0;
 		ArrayList<Client> clientsSearch= orderClientByNames();
@@ -192,6 +253,12 @@ public class AdminSystem {
 	}
 
 
+	
+	/** Method for sorting clients by names<br>
+	<b> pre: </b> Must have created client list<br>
+	<b> post: </b> returns ordered client list <br>
+	
+	*/
 	public ArrayList<Client> orderClientByNames() {
 		ArrayList<Client> clientByNames= clients;
 
@@ -217,7 +284,11 @@ public class AdminSystem {
 
 	}
 
-
+	/** Method for printing clients sorted by phone<br>
+	<b> pre: </b> Must have created client list<br>
+	<b> post: </b> returns string ordered client list <br>
+	
+	*/
 	public String printOrderedClientsByPhone() {
 		String info="";
 		ArrayList<Client> phoneClients= clients;
@@ -228,7 +299,17 @@ public class AdminSystem {
 		}
 		return info;
 	}
-
+	
+	
+	/** method for adding a client <br>
+	<b> pre: </b> <br>
+	<b> post: </b> Creates a client and adds it to list in corresponding position<br>
+	@param idType, id type of the client, must be a Constant from enum IdType
+	@param idNumber, a positive whole number 
+	@param name, a name for the client, must be a String !=null or !=" "
+	@param phoneNumber, a positive 10 digit whole number 
+	@param address, an address,must be a String !=null or !=" "
+	*/
 	public void addClient(IdType idType, int idNumber, String name, Long phoneNumber, String address) {
 		Client c= new Client (idType,idNumber,name,phoneNumber,address);
 		if(clients.isEmpty()) {
@@ -249,6 +330,11 @@ public class AdminSystem {
 
 	}
 
+	/** Method for displaying clients<br>
+	<b> pre: </b> Must have created client list<br>
+	<b> post: </b> returns string with clients information <br>
+	
+	*/
 	public String showClients() {
 		String info="";
 		for(int i=0; i<clients.size(); i++) {
@@ -257,6 +343,10 @@ public class AdminSystem {
 		return info;
 	}
 
+	/**  method for serializing clients <br>
+	<b> pre: </b> List already has to be initialized<br>
+	<b> post: </b> Serializes clients <br>
+	*/
 	public void saveClients() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_CLI_SER);
 		ObjectOutputStream oos= new ObjectOutputStream (new FileOutputStream(f));
@@ -264,6 +354,10 @@ public class AdminSystem {
 		oos.close();
 	}
 
+	/**  method for deserializing clients <br>
+	<b> pre: </b> List already has to be initialized<br>
+	<b> post: </b> deserializes clients and loads them <br>
+	*/
 	@SuppressWarnings("unchecked")
 	public void loadClients() throws FileNotFoundException, IOException, ClassNotFoundException {
 		File f = new File(FILE_CLI_SER);
@@ -277,6 +371,13 @@ public class AdminSystem {
 
 	//************************************************************************************
 	// Order methods
+	/** Method for searching orders <br>
+	<b> pre: </b> Must have created order list in client<br>
+	<b> post: </b> returns position of the order in the list <br>
+	@param c, order code
+	@param cliIndex, the position where the client whose order is being searched for
+	
+	*/
 	public int searchOrder(int c, int cliIndex) throws OrderNotFoundException {
 		int search = c;
 		boolean found= false;
@@ -294,6 +395,12 @@ public class AdminSystem {
 		}	
 	}
 
+	/** Method for showing client's orders <br>
+	<b> pre: </b> Must have created order list in client<br>
+	<b> post: </b> returns string with client orders <br>
+	@param c, client with orders
+
+	*/
 	public String showOrders(Client c) {
 		String info="";
 		for(int i=0; i<c.getOrder().size(); i++) {
@@ -306,7 +413,12 @@ public class AdminSystem {
 		return info;
 	}
 
-	
+	/** Method for showing all client's orders <br>
+	<b> pre: </b> Must have created orders list<br>
+	<b> post: </b> returns string with all orders <br>
+	@param separator, char that will separate information
+
+	*/
 	public String showAllOrders(char separator) {
 		String info="";
 		
@@ -320,10 +432,13 @@ public class AdminSystem {
 		return info;
 	}
 
+	/** Method for sorting all client's orders <br>
+	<b> pre: </b> Must have created all orders list<br>
+	<b> post: </b> sorts the list by the criteria, restaurant tax id, client id, date (all ascending) <br>
+
+	*/
 	public void orderOrdersForExport() {
-		//Order by restaurantTaxId 1
-		//Order by client ID
-		//Date
+		
 		Comparator<Order> c;
 
 		c = new Comparator<Order>() {			
@@ -358,7 +473,11 @@ public class AdminSystem {
 		
 	}
 
+	/** Method for adding all client's orders <br>
+	<b> pre: </b> Must have created all orders list<br>
+	<b> post: </b> adds all orders to list <br>
 
+	*/
 	public void addAllOrders() {
 		int size=clients.size();
 		ordersExport.clear();
@@ -373,6 +492,12 @@ public class AdminSystem {
 
 
 	//Import Export Methods
+	
+	/** Method for importing restaurants <br>
+	<b> pre: </b> Must have created restaurant list<br>
+	<b> post: </b>imports restaurants into program <br>
+	@param path, String representing the file path to import into program
+	*/
 	public void importRestaurants(String path) throws IOException {
 		BufferedReader brf= new BufferedReader(new FileReader(path));
 		String line=brf.readLine();
@@ -390,6 +515,12 @@ public class AdminSystem {
 		brf.close();
 	}
 
+	/** Method for importing products into restaurant <br>
+	<b> pre: </b> Must have created restaurant list and product list<br>
+	<b> post: </b>imports products into program <br>
+	@param path, String representing the file path to import into program
+	@param taxID, tax id of the restaurant products to be imported to
+	*/
 	public void importProducts(String path, int taxID) throws IOException, RestaurantNotFoundException {
 		BufferedReader brf= new BufferedReader(new FileReader(path));
 		String line=brf.readLine();
@@ -409,7 +540,11 @@ public class AdminSystem {
 		brf.close();
 	}
 
-
+	/** Method for importing clients <br>
+	<b> pre: </b> Must have created client list<br>
+	<b> post: </b>imports clients into program <br>
+	@param path, String representing the file path to import into program
+	*/
 	public void importClients(String path) throws IOException {
 		BufferedReader brf= new BufferedReader(new FileReader(path));
 		String line=brf.readLine();
@@ -429,7 +564,13 @@ public class AdminSystem {
 
 		brf.close();
 	}
-
+	
+	
+	/** Method for importing orders <br>
+	<b> pre: </b> Must have created client list<br>
+	<b> post: </b>imports orders into program if the client and restaurant exist in program <br>
+	@param path, String representing the file path to import into program
+	*/
 	public int[] importOrders(String path) throws IOException {
 		BufferedReader brf= new BufferedReader(new FileReader(path));
 		String line=brf.readLine();
@@ -465,7 +606,12 @@ public class AdminSystem {
 		return cantAdd;
 
 	}
-
+	
+	/** Method for exporting orders <br>
+	<b> pre: </b> Must have created exportOrders list<br>
+	<b> post: </b>exports orders to csv file <br>
+	@param separator, char that will separate information
+	*/
 	
 	public void exportOrders(char separator) throws IOException, FileNotFoundException {
 		File f= new File (FILE_EXPORT);

@@ -4,16 +4,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+
 class ClientTest {
 
+	
 	private Client c ;
 
+	/**
+	 * Setup stage 1.
+	 */
 	public void setupStage1() {
 		c= new Client(IdType.LICENSE, 564654,"Pedro Salazar",3187284546L,"421 Rocky rd");
 		
 	}
 	
 	
+	/**
+	 * Test client.
+	 */
 	@Test
 	public void testClient() {
 		IdType idType=IdType.PASSPORT;
@@ -31,6 +39,9 @@ class ClientTest {
 	
 	}
 	
+	/**
+	 * Test add order.
+	 */
 	@Test
 	public void testAddOrder() {
 		setupStage1();
